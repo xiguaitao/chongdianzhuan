@@ -1,0 +1,281 @@
+{
+	"pages": [{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/index/map",
+			"style": {
+				"navigationBarTitleText": "智能充电"
+			}
+		},
+		{
+			"path": "pages/index/station",
+			"style": {
+				"navigationBarTitleText": "电站信息"
+			}
+		},
+		{
+			"path": "pages/index/ing4",
+			"style": {
+				"navigationBarTitleText": "充电中",
+				"app-plus": {
+					"softinputMode": "adjustResize"
+				}
+			}
+		},
+		{
+			"path": "pages/chognzhi/chognzhi",
+			"style": {
+				"navigationBarTitleText": "充值",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/wode/wode",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/wode/inuseorder",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/wode/inuseorderdetial",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/wode/cardlist",
+			"style": {
+				"navigationBarTitleText": "电卡管理"
+			}
+		},
+		{
+			"path": "pages/wode/problem",
+			"style": {
+				"navigationBarTitleText": "问题反馈"
+			}
+		},
+		{
+			"path": "pages/wode/personalInfo",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/wode/vacancy",
+			"style": {
+				"navigationBarTitleText": "我的余额",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/wode/bindphone",
+			"style": {
+				"navigationBarTitleText": "绑定手机号"
+			}
+		},
+		{
+			"path": "pages/index/login/login",
+			"style": {
+				"navigationBarTitleText": "登录/注册"
+			}
+		},
+		{
+			"path": "pages/index/phone/phone",
+			"style": {
+				"navigationBarTitleText": "用户授权",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/index/indexCode/indexCode",
+			"style": {
+				"navigationBarTitleText": "请输入桩编码",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/wode/vouchers/vouchers",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 100
+			}
+		},
+		{
+			"path": "pages/wode/vouchers-choose/vouchers-choose",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/wode/share/share",
+			"style": {
+				"navigationBarTitleText": "分享",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/index/payment/payment",
+			"style": {
+				"navigationBarTitleText": "确认支付",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/wode/orderDetail/orderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"subPackages": [{
+		"root": "subpackageA",
+		"name": "subpackageA",
+		"pages": [{
+				"path": "index/success4",
+				"style": {
+					"navigationBarTitleText": "充电",
+					"navigationStyle": "custom",
+					"app-plus": {
+						"softinputMode": "adjustResize"
+					}
+				}
+			},
+			{
+				"path": "favorite/favorite",
+				"style": {
+					"navigationBarTitleText": "收藏",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "pointsDetail/pointsDetail",
+				"style": {
+					"navigationBarTitleText": "积分明细",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "redeemingCoupons/redeemingCoupons",
+				"style": {
+					"navigationBarTitleText": "兑换优惠券",
+					"enablePullDownRefresh": true,
+					"onReachBottomDistance": 100
+				}
+			},
+			{
+				"path": "commonProblems/commonProblems",
+				"style": {
+					"navigationBarTitleText": "常见问题",
+					"enablePullDownRefresh": true,
+					"onReachBottomDistance": 100
+				}
+			},
+			{
+				"path": "vehiclesManagement/vehiclesManagement",
+				"style": {
+					"navigationBarTitleText": "车辆管理",
+					"enablePullDownRefresh": true
+				}
+			},
+			{
+				"path": "accountManagement/accountManagement",
+				"style": {
+					"navigationBarTitleText": "账户管理",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "addVehicle/addVehicle",
+				"style": {
+					"navigationBarTitleText": "添加车辆",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "invoiceHeaderManagement/invoiceHeaderManagement",
+				"style": {
+					"navigationBarTitleText": "发票抬头",
+					"enablePullDownRefresh": true
+				}
+			},
+			{
+				"path": "openInvoice/openInvoice",
+				"style": {
+					"navigationBarTitleText": "开具发票"
+					// "navigationStyle": "custom"
+				}
+			},
+			{
+				"path" : "invoiceHeader/invoiceHeader",
+				"style" : 
+				{
+					"navigationBarTitleText" : "常用开票抬头"
+					// "navigationStyle": "custom"
+				}
+			},
+			{
+				"path" : "privacy/privacy",
+				"style" : 
+				{
+					"navigationBarTitleText" : "用户协议"
+					
+				}
+			}
+		]
+	}],
+	"tabBar": {
+		"color": "#474747",
+		"custom": true,
+		"selectedColor": "#155fcf",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/img/home1_m.png",
+				"selectedIconPath": "static/img/home1.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/wode/share/share",
+				"iconPath": "static/img/share_m.png",
+				"selectedIconPath": "static/img/share.png",
+				"text": "分享"
+			},
+			{
+				"pagePath": "pages/wode/inuseorder",
+				"iconPath": "static/img/order_m.png",
+				"selectedIconPath": "static/img/order.png",
+				"text": "订单"
+			},
+			{
+				"pagePath": "pages/wode/wode",
+				"iconPath": "static/img/my_m.png",
+				"selectedIconPath": "static/img/my.png",
+				"text": "我的"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "充电桩",
+		"navigationBarBackgroundColor": "#5997FE",
+		"backgroundColor": "#ffffff"
+	}
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "分享",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "my-tabbar": "/components/myTabbar/myTabbar"
+  }
+}

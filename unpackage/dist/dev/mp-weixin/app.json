@@ -1,0 +1,95 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/index/map",
+    "pages/index/station",
+    "pages/index/ing4",
+    "pages/chognzhi/chognzhi",
+    "pages/wode/wode",
+    "pages/wode/inuseorder",
+    "pages/wode/inuseorderdetial",
+    "pages/wode/cardlist",
+    "pages/wode/problem",
+    "pages/wode/personalInfo",
+    "pages/wode/vacancy",
+    "pages/wode/bindphone",
+    "pages/index/login/login",
+    "pages/index/phone/phone",
+    "pages/index/indexCode/indexCode",
+    "pages/wode/vouchers/vouchers",
+    "pages/wode/vouchers-choose/vouchers-choose",
+    "pages/wode/share/share",
+    "pages/index/payment/payment",
+    "pages/wode/orderDetail/orderDetail"
+  ],
+  "subPackages": [
+    {
+      "root": "subpackageA",
+      "pages": [
+        "index/success4",
+        "favorite/favorite",
+        "pointsDetail/pointsDetail",
+        "redeemingCoupons/redeemingCoupons",
+        "commonProblems/commonProblems",
+        "vehiclesManagement/vehiclesManagement",
+        "accountManagement/accountManagement",
+        "addVehicle/addVehicle",
+        "invoiceHeaderManagement/invoiceHeaderManagement",
+        "openInvoice/openInvoice",
+        "invoiceHeader/invoiceHeader",
+        "privacy/privacy"
+      ],
+      "name": "subpackageA"
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "充电桩",
+    "navigationBarBackgroundColor": "#5997FE",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#474747",
+    "custom": true,
+    "selectedColor": "#155fcf",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/img/home1_m.png",
+        "selectedIconPath": "static/img/home1.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/wode/share/share",
+        "iconPath": "static/img/share_m.png",
+        "selectedIconPath": "static/img/share.png",
+        "text": "分享"
+      },
+      {
+        "pagePath": "pages/wode/inuseorder",
+        "iconPath": "static/img/order_m.png",
+        "selectedIconPath": "static/img/order.png",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/wode/wode",
+        "iconPath": "static/img/my_m.png",
+        "selectedIconPath": "static/img/my.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "usingComponents": {}
+}

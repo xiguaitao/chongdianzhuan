@@ -1,0 +1,199 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.container.data-v-7b1b54a6 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background: #F1F3F6;
+}
+.container .main.data-v-7b1b54a6 {
+  width: 100%;
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+}
+.container .main .mainContent.data-v-7b1b54a6 {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+.container .main .mainContent .content.data-v-7b1b54a6 {
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+.container .main .mainContent .content .users.data-v-7b1b54a6 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container .main .mainContent .content .users .usersLeft.data-v-7b1b54a6 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container .main .mainContent .content .users .usersLeft .avatar.data-v-7b1b54a6 {
+  margin-right: 16rpx;
+}
+.container .main .mainContent .content .users .usersLeft .message .name.data-v-7b1b54a6 {
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 500;
+  font-size: 32rpx;
+  color: #2E3033;
+  line-height: 38rpx;
+  margin-bottom: 8rpx;
+}
+.container .main .mainContent .content .users .usersLeft .message .phone.data-v-7b1b54a6 {
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 24rpx;
+  color: #616366;
+  line-height: 28rpx;
+  margin-bottom: 8rpx;
+}
+.container .main .mainContent .content .users .usersLeft .message .type lable.data-v-7b1b54a6 {
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 16rpx;
+  color: #FFFFFF;
+  line-height: 19rpx;
+  margin-left: 4rpx;
+}
+.container .main .mainContent .content .users .usersLeft .message .type view.data-v-7b1b54a6 {
+  width: -webkit-fit-content;
+  width: fit-content;
+  background: #16D97D;
+  display: flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  box-sizing: border-box;
+  border-radius: 100rpx 100rpx 100rpx 100rpx;
+}
+.container .main .mainContent .content .users .usersLeft .message .type view ._span.data-v-7b1b54a6 {
+  margin-left: 4rpx;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 16rpx;
+  color: #FFFFFF;
+  line-height: 19rpx;
+}
+.container .main .mainContent .content .users .usersRight .charge.data-v-7b1b54a6 {
+  display: grid;
+  place-content: center;
+  padding: 8rpx 32rpx;
+  box-sizing: border-box;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 28rpx;
+  color: #FFFFFF;
+  line-height: 33rpx;
+  border-radius: 100rpx 100rpx 100rpx 100rpx;
+  background: #5995FE;
+  margin-bottom: 24rpx;
+}
+.container .main .mainContent .content .users .usersRight .refund.data-v-7b1b54a6 {
+  display: grid;
+  place-content: center;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 20rpx;
+  color: #FF9E59;
+  line-height: 23rpx;
+}
+.container .main .mainContent .content .data.data-v-7b1b54a6 {
+  width: 100%;
+  margin-top: 48rpx;
+  position: relative;
+  height: 160rpx;
+  /* box-shadow: 0rpx 4rpx 8rpx 0rpx #3399FF; */
+  -webkit-filter: drop-shadow(0px 10rpx 15rpx #3399FF);
+          filter: drop-shadow(0px 10rpx 15rpx #3399FF);
+}
+.container .main .mainContent .content .data .dataBg.data-v-7b1b54a6 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.container .main .mainContent .content .data .dataBg image.data-v-7b1b54a6 {
+  width: 100%;
+  height: 100%;
+}
+.container .main .mainContent .content .data .dataList.data-v-7b1b54a6 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.container .main .mainContent .content .data .list.data-v-7b1b54a6 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.container .main .mainContent .content .data .list .number.data-v-7b1b54a6 {
+  font-family: DIN-Bold, DIN-Bold;
+  font-weight: 400;
+  font-size: 44rpx;
+  color: #FFFFFF;
+  line-height: 52rpx;
+  margin-bottom: 8rpx;
+}
+.container .main .mainContent .content .data .list .text.data-v-7b1b54a6 {
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 28rpx;
+}
+.container .main .mainContent .content .contentList.data-v-7b1b54a6 {
+  margin-top: 68rpx;
+  padding: 12rpx 32rpx;
+  box-sizing: border-box;
+  border-radius: 16rpx;
+  background: #fff;
+}
+.container .main .mainBg.data-v-7b1b54a6 {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 562rpx;
+  background: linear-gradient(180deg, #B2CFFF 0%, rgba(229, 239, 255, 0) 100%);
+}
+.container .tabbar.data-v-7b1b54a6 {
+  z-index: 3;
+}
+

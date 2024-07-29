@@ -1,0 +1,17 @@
+{
+  "navigationBarTitleText": "开具发票",
+  "usingComponents": {
+    "u--form": "/uni_modules/uview-ui/components/u--form/u--form",
+    "u-form-item": "/uni_modules/uview-ui/components/u-form-item/u-form-item",
+    "u-radio-group": "/uni_modules/uview-ui/components/u-radio-group/u-radio-group",
+    "u-radio": "/uni_modules/uview-ui/components/u-radio/u-radio",
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "u--input": "/uni_modules/uview-ui/components/u--input/u--input",
+    "u-checkbox-group": "/uni_modules/uview-ui/components/u-checkbox-group/u-checkbox-group",
+    "u-checkbox": "/uni_modules/uview-ui/components/u-checkbox/u-checkbox",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup",
+    "u-modal": "/uni_modules/uview-ui/components/u-modal/u-modal"
+  }
+}

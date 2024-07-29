@@ -1,0 +1,2458 @@
+<template>
+	<view class="main">
+		<view class="change" :style="showtype > 1 ? 'overflow: hidden;height:calc(100vh - 50px);' : ''">
+			<view class="nav-bar" :style="{ height: `${navBarHeight}px` }">
+				<view class="search"
+					:style="{ height: `${menuHeight}px`, 'padding-right': `${menuRight}px`, 'padding-top': `${menuTop}px` }"
+					@click="back">
+					<view class="fh" @click="back">
+						<image src="../../static/img/left.png"></image>
+					</view>
+					<view class="return">充电</view>
+				</view>
+			</view>
+			<image v-if="advert.imageUrl" :src="advert.imageUrl" style="width: 100vw;" mode="widthFix"></image>
+			<view class="change-con">
+
+				<view class="pileInformation">
+					<view class="name">{{ plotName }}</view>
+					<view class="address">
+						<image src="../../static/img/address.png"></image>
+						<span>{{ province }}{{ city }}{{ regionName }}{{ pkaddress }}</span>
+					</view>
+					<view class="numbering">
+						<view class="title-l">充电桩编号：{{ id }}</view>
+						<view class="title-r">{{ pileType == 1 ? '快充' : pileType == 2 ? '超充' : '慢充' }}</view>
+					</view>
+				</view>
+
+				<view class="device_port">
+					<view class="device_port_name">选择设备端口</view>
+					<view class="device_port_content">
+						<view class="device_port_list " :class="portId == item.id ? 'selected' : ''"
+							v-for="(item, index) in item" :key="index" @click="choosePort(item)">
+							<view>{{ item.name }}</view>
+							<view class="cornerMarkers" v-if="item.state == 'Y'" style="background: #6DE6AD;">正在使用
+							</view>
+							<view class="cornerMarkers" v-if="item.state == 'F'" style="background: #ff0000;">端口故障
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="payment_methods">
+					<view class="device_port_name">支付方式</view>
+
+					<view class="payment_methods_content">
+						<view class="tab">
+							<view class="tab_list" :class="{ selected: indicatorDots == 0 }" @click="tabChange(0)">预付款
+							</view>
+							<view class="tab_list" :class="{ selected: indicatorDots == 1 }" @click="tabChange(1)">账户余额
+							</view>
+						</view>
+						<view class="content">
+							<view class="swiper">
+
+								<view class="swiper_item" v-if="indicatorDots == 0">
+									<view class="text">先付后充，充电结束后剩余金额将原路退回</view>
+									<view class="content">
+										<view class="list" :class="moneyIndex == index ? 'selected' : ''"
+											v-for="(item, index) in paymentMethods" :key="index"
+											@click="checkPayMoney(index)">{{ item.name + '元' }}
+										</view>
+									</view>
+
+								</view>
+
+
+								<view class="swiper_item" v-if="indicatorDots == 1">
+									<view class="account_balance_list">
+										<view class="imgIcon">
+											<image src="../../static/img/fwf.png" mode=""></image>
+										</view>
+										<view class="name">余额( 剩余 ￥{{ accountAmount }} )</view>
+										<view class="goChongZhi" v-on:click="goCz()">
+											去充值 >
+										</view>
+										<!-- <view class="amount">{{accountAmount}}</view> -->
+									</view>
+								</view>
+
+
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="charging_time">
+					<view class="device_port_name">充电时长</view>
+
+
+					<view class="charging_time_content">
+
+						<view class="charging_time_list" :class="index2 == time ? ' selected ' : ''"
+							v-for="(item, index2) in chargingPilePrice" :key="index2" style="padding: 0;"
+							@click.stop="checktime(index2, item, false)">
+							<view v-if="item.chargeType == 3001" style="padding: 10px 0">
+								{{ item.time }}小时
+							</view>
+							<view v-else @click.stop="checktime(index2, item, true)" style="padding: 10px 0">
+								智能充满
+							</view>
+						</view>
+						<view class="charging_time_list" v-if="!iszhineng" style="color: #000;">
+							<input te maxlength="3" type="number" v-model="timecc" placeholder="自定义时长"
+								@input="inputTimecc" @click.stop="customize" cursor-spacing="10" class="input" />
+						</view>
+					</view>
+				</view>
+
+
+
+				<view class="billing_standards">
+					<view class="device_port_name">计费标准</view>
+					<view class="font_list">
+						<view v-for="(item, index) in feeTips" :key="index">
+							[{{ item.priceType == 0 ? '尖' : item.priceType == 1 ? '峰' : item.priceType == 2 ? '平' :
+								item.priceType == 3 ? '谷' : item.priceType }}]
+							{{ fromtTime(item.startTime + '') }}-{{ fromtTime(item.endTime + '') }}
+							电费:{{ item.price }}元/度，服务费:{{ item.servicePrice }}元/度
+						</view>
+
+					</view>
+				</view>
+				<view class="bottom_view">
+					<view class="change_btn" @click="start()">开始充电</view>
+				</view>
+
+			</view>
+		</view>
+
+
+		<u-modal :show="showbox" title="充电详情" showCancelButton @confirm="confirm" @cancel="cancel">
+			<view class="cdxq_tc">
+				<view class="item" v-if="indicatorDots == 1">
+					<view>账户余额</view>
+					<view>{{ toDecimal2(accountAmount) }}</view>
+				</view>
+				<view class="item" v-if="indicatorDots == 0">
+					<view>预付款</view>
+					<view>{{ toDecimal2(paymentMethods[moneyIndex].name) }}</view>
+				</view>
+				<view class="item">
+					<view>地址</view>
+					<view>{{ pkaddress }}</view>
+				</view>
+				<view class="item">
+					<view>充电桩ID</view>
+					<view>{{ key }}</view>
+				</view>
+				<view class="item">
+					<view>端口号</view>
+					<view>{{ portName }}</view>
+				</view>
+			</view>
+		</u-modal>
+
+		<view class="infobox" v-show="ygbzbox">
+			<view class="top-infod">
+				<image src="../../static/img/error.png"></image>
+			</view>
+			<view class="info-txt">
+				<view>您的帐户余额已不足<text style="color:#4d9dff;margin: 0 5px;">10</text>元</view>
+				<view>请及时充值！</view>
+			</view>
+			<view class="toos">
+				<view class="btnn confirm" v-on:click="goCz()" style="width: 100%;text-align: center;">去充值</view>
+			</view>
+		</view>
+
+		<u-modal :show="showtype == 2">
+			<view class="cd_tc">
+				<image src="../../static/img/kqz.png"></image>
+				<view>开启充电中</view>
+				<view>请保持充电电缆的连接并耐心等待！</view>
+			</view>
+		</u-modal>
+
+		<view class="czd-box" v-show="showtype == 3">
+			<view class="box" :style="{ '--height-bar': `${navBarHeight}px` }">
+				<view class="nav-bar" :style="{ height: `${navBarHeight}px` }">
+					<view class="search"
+						:style="{ height: `${menuHeight}px`, 'padding-right': `${menuRight}px`, 'padding-top': `${menuTop}px` }"
+						@click="back">
+						<view class="fh" @click="back">
+							<image src="../../static/img/left.png"></image>
+						</view>
+						<view class="return">{{ title3 }}</view>
+					</view>
+				</view>
+				<view class="mains">
+					<view class="top-bg-box">
+						<view class="txtbb">
+							<image src="../../static/img/jd-w.png" />
+							<image class="nei" src="../../static/img/jd-n.png" />
+							<view class="number">{{ scoketData.soc }}<span>%</span></view>
+							<view style="font-size: 22rpx;color: #fff;">充满还需 {{ scoketData.preEndMin }} 分钟</view>
+							<view class="time">{{ toHoursAndMinutes(totTime) }}</view>
+						</view>
+					</view>
+
+
+					<view class="box-contt">
+						<view class="list">
+							<view class="content">
+								<span>{{ (scoketData.hasChargePower / 1000).toFixed(4) }}kWh</span>
+								<span>已充电量</span>
+							</view>
+							<!-- <view class="line">|</view> -->
+							<view class="content">
+								<span>{{ (scoketData.realTimePower / 1000).toFixed(4) }}KW</span>
+								<span>实时功率</span>
+							</view>
+						</view>
+						<view class="line"></view>
+						<view class="list">
+							<view class="content">
+								<span>{{ scoketData.voltage }}V</span>
+								<span>实时电压</span>
+							</view>
+							<!-- <view class="line">|</view> -->
+							<view class="content">
+								<span>{{ scoketData.electricity }}A</span>
+								<span>实时电流</span>
+							</view>
+						</view>
+					</view>
+					<view class="box-cont">
+
+						<view class="list">
+							<view>
+								<image src="../../static/img/home_active.png" />
+								<view>充电桩</view>
+							</view>
+							<view>{{ orderInfo.parkid }}({{ orderInfo.name }})</view>
+						</view>
+						<view class="list">
+							<view>
+								<image src="../../static/img/df.png" />
+								<view>电费</view>
+							</view>
+							<view>¥{{ scoketData.powerFee }}</view>
+						</view>
+						<view class="list">
+							<view>
+								<image src="../../static/img/fwf.png" />
+								<view>服务费</view>
+							</view>
+							<view>¥{{ scoketData.serviceFee }}</view>
+						</view>
+						<view class="list">
+							<view>
+								<image src="../../static/img/fwf.png" />
+								<view>合计</view>
+							</view>
+							<view>¥{{ scoketData.totalFee }}</view>
+						</view>
+						<!-- <view class="list" style="padding-bottom:0 ;">
+							<view>
+								<image src="../../static/img/error.png" />
+								<view style="font-size: 22rpx;font-weight: bold;">正在充电中，请勿拔枪，请确认充电停止后再操作拔枪。</view>
+							</view>
+						</view> -->
+					</view>
+				</view>
+				<view style="height:88rpx;display: flex;align-items: center;padding-left: 64rpx;">
+					<image src="../../static/img/error.png" style="width: 24rpx;height: 24rpx;margin-right: 8rpx;" />
+					<view style="font-size: 22rpx;font-weight: bold;">正在充电中请勿拔枪，请确认充电停止后再操作拔枪。</view>
+				</view>
+				<view class="box-btn" @click="userCancelOrderConfirm()">
+					<view>结束充电</view>
+				</view>
+			</view>
+		</view>
+
+		<u-modal :show="poptt" showCancelButton @confirm="userCancelOrder" @cancel="poptt = false">
+			<view class="cdwc_tc">
+				<image src="../../static/img/error.png"></image>
+				<view>确定要结束充电吗？</view>
+			</view>
+		</u-modal>
+
+		<view class="order-detal" v-show="showtype == 4">
+			<view class="nav-bar" :style="{ height: `${navBarHeight}px` }">
+				<view class="search"
+					:style="{ height: `${menuHeight}px`, 'padding-right': `${menuRight}px`, 'padding-top': `${menuTop}px` }"
+					@click="back">
+					<view class="fh" @click="back">
+						<image src="../../static/img/left.png"></image>
+					</view>
+					<view class="return">充电完成</view>
+				</view>
+			</view>
+			<view class="order-top">
+				<view class="tit">{{ orderInfo.pileName }}({{ orderInfo.parkid }})</view>
+				<image src="../../static/img/detail-ico.png"></image>
+				<view class="tit-con" v-if="orderInfo.orderstate == 1">下单中</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 2">已取消</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 3">支付成功</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 4">退款</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 5">完成</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 6">结算中</view>
+				<view class="tit-con" v-if="orderInfo.orderstate == 7">手动结算</view>
+			</view>
+			<view class="order-con">
+				<view class="ord-list">
+					<view class="list-tit">订单信息</view>
+					<view class="list-item">
+						<view class="list-con"><span>充电时长：</span><span>{{ toHoursAndMinutes(totTime) }}</span></view>
+						<view class="list-con"><span>充电电量：</span><span>{{ orderInfo.lossChargeKwh }}kWh</span></view>
+						<view class="list-con"><span>开始时间：</span><span>{{ orderInfo.starttime }}</span></view>
+						<view class="list-con"><span>结束时间：</span>
+							<span v-if="orderInfo.realEndTime">{{ orderInfo.realEndTime }}</span>
+							<span v-if="!orderInfo.realEndTime">{{ orderInfo.updateTime }}</span>
+						</view>
+					</view>
+				</view>
+				<view class="ord-list">
+					<view class="list-tit">充电费用</view>
+					<view class="list-item">
+						<view class="list-con ">
+							<span>电费</span>
+							<span class="font">¥{{ orderInfo.chargeFee }}</span>
+						</view>
+						<view class="list-con">
+							<span>服务费</span>
+							<span class="font">¥{{ orderInfo.serviceFee }}</span>
+						</view>
+						<view class="list-con">
+							<span>应付金额</span>
+							<span class="font">¥{{ orderInfo.amount }}</span>
+						</view>
+						<view class="list-con">
+							<span>优惠金额</span>
+							<span class="font">¥{{ orderInfo.couponAmount }}</span>
+						</view>
+						<view class="list-con">
+							<span>支付金额</span>
+							<span class="font">¥{{ orderInfo.ordergold }}</span>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="order-btn" @click="goIndex">返回首页</view>
+		</view>
+
+		<view class="mask" v-show="maskpan"></view>
+		<view class="mask" v-show="poptt" style="z-index: 8;"></view>
+		<u-modal :show="modalShow" @confirm="modalConfirm()" @cancel="modalShow = false" confirm-text="我知道了">
+			<view class="slot-content">
+				<image src="http://e.nxptdn.com/user/file/image/wxqDialogIcon.png"
+					style="width: 541rpx;height: 190rpx;" />
+				<view class="modalText">
+					{{ modalText }}
+				</view>
+			</view>
+		</u-modal>
+		<u-overlay :show="loading">
+			<u-loading-icon></u-loading-icon>
+		</u-overlay>
+
+	</view>
+</template>
+
+<script>
+import app from '@/static/js/app.js';
+import {
+	websocetObj
+} from '@/static/js/websocet.js';
+import {
+	getChargingPileData,
+	getCarPilePrice,
+	chargeing,
+	getBalance
+} from '@/static/js/url/index.js';
+import {
+	saveOrder,
+	single,
+	orderwxPay,
+	endCharging,
+	noPayInfo
+} from '@/static/js/url/chargeOrder.js';
+export default {
+	data() {
+		return {
+			title3: "充电中",
+			indicatorDots: 0,
+			//顶部栏
+			navBarHeight: getApp().globalData.navBarHeight,
+			menuRight: getApp().globalData.menuRight,
+			menuTop: getApp().globalData.menuTop,
+			menuHeight: getApp().globalData.menuHeight,
+			//===
+			modalText: "",
+			totTime: 0,
+			totTimeTimer: null,
+			toDecimal2: app.toDecimal2,
+			maskpan: false,
+			ygbzbox: false,
+			type: 8001,
+			Chargingtime: false,
+			time: 0,
+			input: "",
+			successShow: false,
+			iszhineng: true,
+			regionName: '',
+			province: '',
+			city: '',
+			plotName: '',
+			advert: {},
+			showtype: 1,
+			poptt: false,
+			openid: '',
+			showbox: false,
+			timecc: '12',
+			item: [],
+			id: 61,
+			key: '',
+			pkaddress: '',
+			pkname: '',
+			pileType: 0,
+			socketTask: {},
+			accountAmount: 0.00, //账户余额
+			cardAmount: 0.00, //卡余额
+			chargingPilePrice: [{
+				id: 1,
+				time: "智能充满",
+				value: 0
+			},
+			{
+				id: 2,
+				time: "1",
+				value: 1,
+				chargeType: 3001
+			},
+			{
+				id: 3,
+				time: "2",
+				value: 2,
+				chargeType: 3001
+			},
+			{
+				id: 4,
+				time: "3",
+				value: 4,
+				chargeType: 3001
+			},
+			], //计费方式
+			paymentMethods: [{
+				id: '0',
+				name: 10,
+			},
+			{
+				id: '1',
+				name: 20,
+			},
+			{
+				id: '2',
+				name: 30,
+			},
+			{
+				id: '3',
+				name: 50,
+			},
+			{
+				id: '4',
+				name: 100,
+			},
+			{
+				id: '5',
+				name: 200,
+			},
+			{
+				id: '6',
+				name: 300,
+			},
+			], //支付方式
+			feeTips: [], //计费规则
+			portId: 1, //充电端口
+			portName: '', //充电端口名称
+			orderInfo: {
+				address: "",
+				chargeStatus: "",
+				createtime: "",
+				endTime: "",
+				hour: "",
+				id: "",
+				isFee: "",
+				orderType: "",
+				ordergold: "",
+				ordernumber: "",
+				orderstate: "",
+				parkid: "",
+				parklockid: "",
+				price: "",
+				startTime: "",
+			},
+			isClose: false,
+			scoketData: {
+				hasChargePower: 0,
+				realTimePower: 0.0,
+				electricity: 0.0,
+				voltage: 0.0,
+				serviceFee: 0.0,
+				powerFee: 0.0,
+				totalFee: 0.0,
+				chargeMin: 0,
+				preEndMin: 0,
+				soc: 0,
+			},
+			socketShow: false,
+			webtext: '',
+			statusCode: null,
+			modalShow: false,
+			// isSaveOrder: false,
+			socketNum: 0,
+			socketTimer: 0,
+			settlementTimer: null,
+			loading: false,
+			moneyIndex: 0, //预付款选中价格
+			payMoney: 0, //预付款金额
+			openId: uni.getStorageSync('openid')
+		}
+	},
+	onHide() {
+		this.isClose = true;
+
+	},
+	onShow() {
+		uni.$on('isPay', (data) => {
+			if (data) {
+				this.getOrderDetail(data);
+			}
+		})
+		this.queryAccountBalance()
+		// this.updateSettlementOrder()
+		// this.saveOrder();
+	},
+	// destroyed() {
+	// 	this.isClose = true;
+	// 	if (!this.socketTask) {
+	// 		this.socketTask.close()
+	// 	}
+	// 	clearInterval(this.totTimeTimer);
+	// 	clearInterval(this.settlementTimer)
+	// },
+	onLoad(option) {
+		this.key = option.key;
+		this.orderInfo.id = option.ordernumber
+		var _this = this;
+		if (option.ordernumber) {
+			_this.getOrderDetail(option.ordernumber);
+		} else {
+			uni.getStorage({
+				key: "openid",
+				success(res) {
+					_this.openid = res.data;
+					//获取设备端口
+					_this.getChargingPileData();
+					// //获取账户余额
+					_this.queryAccountBalance();
+					// //获取广告
+					// _this.showAdvert();
+					// 查询充电中订单
+					_this.getchargeing()
+				}
+			})
+		}
+	},
+	watch: {
+		"$route": function (newValue, oldView) {
+		}
+	},
+	methods: {
+		back() {
+			uni.navigateBack({
+				delta: 1
+			});
+		},
+		getchargeing() {
+			const data = {
+				openId: this.openId,
+			}
+			chargeing(data).then(res => {
+				if (res.code == 0) {
+					if (res.data) {
+						// 存在充电中订单
+						uni.showModal({
+							title: '提示',
+							content: '存在充电中订单,是否查看?',
+							success: tipsRes => {
+								if (tipsRes.confirm) {
+									this.lookPower(res.data.parkid,res.data.id)
+								} else if (tipsRes.cancel) {
+									console.log('用户点击取消');
+								}
+							}
+						})
+					}
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'none'
+					})
+				}
+			})
+		},
+		lookPower(parkId, ordernumber) {
+			console.log(parkId);
+			uni.navigateTo({
+				url: `/subpackageA/index/success4?key=${parkId}&showType=${3}&ordernumber=${ordernumber}`
+			});
+		},
+		tabChange(index) {
+			this.indicatorDots = index;
+		},
+		swiperChange(e) {
+			this.indicatorDots = e.detail.current;
+		},
+		modalConfirm() {
+			this.modalShow = false;
+			uni.redirectTo({
+				url: "/pages/index/index"
+			})
+		},
+		goCz() {
+			this.ygbzbox = false;
+			this.maskpan = false;
+			this.$u.route('/pages/chognzhi/chognzhi', { isBack: true })
+			// uni.navigateTo({
+			// 	url: '../chognzhi/chognzhi?isBack=true',
+			// })
+		},
+		chkcustomize() {
+			if (!this.portId) {
+				Toast("请选择充电端口");
+			}
+			if (!this.timecc) {
+				Toast("请输入充电时间");
+			}
+			if (this.portId && this.timecc) {
+				this.successShow = true
+			}
+		},
+		fromtTime(intTime) {
+			if (intTime.indexOf('.') == -1 && intTime * 1 < 10) {
+				return '0' + (intTime * 1) + ':00';
+			}
+			if (intTime.indexOf('.') == -1 && intTime * 1 >= 10) {
+				return (intTime * 1) + ':00';
+			}
+			if (intTime.indexOf('.') != -1 && intTime.split('.')[0] * 1 < 10) {
+				return '0' + (intTime.split('.')[0] * 1) + ':30';
+			}
+			if (intTime.indexOf('.') != -1 && intTime.split('.')[0] * 1 >= 10) {
+				return (intTime.split('.')[0] * 1) + ':30';
+			}
+		},
+		formatTimestamps(timestamps, format) {
+			var date = new Date(timestamps);
+			var finalstr = format;
+			finalstr = finalstr.replace('yyyy', date.getFullYear()); //年
+			finalstr = finalstr.replace('mm', this.formatNum(date.getMonth() + 1)); //月
+			finalstr = finalstr.replace('dd', this.formatNum(date.getDate())); //天
+			finalstr = finalstr.replace('hh', this.formatNum(date.getHours())); //时
+			finalstr = finalstr.replace('mi', this.formatNum(date.getMinutes())); //分
+			finalstr = finalstr.replace('ss', this.formatNum(date.getSeconds())); //秒
+			finalstr = finalstr.replace('SSS', this.formatMilliseconds(date.getMilliseconds())); //毫秒
+			//如果不想返回秒和毫秒，注释掉相应行数，传入参数时去掉该参数
+			return finalstr;
+		},
+		formatNum(arg0) {
+			let str = arg0.toString();
+			if (str.length == 1) {
+				return "0" + str;
+			} else {
+				return str;
+			}
+		},
+		formatMilliseconds(arg) {
+			var str = arg.toString();
+			if (str.length == 1) {
+				return "00" + str;
+			} else if (str.length == 2) {
+				return "0" + str;
+			} else if (str.length == 3) {
+				return str;
+			}
+		},
+		toHoursAndMinutes(time) {
+			let timer = () => {
+				// let time2 = time / (1000*60*60)
+				// let h = Math.floor(time2)
+				// let m = Math.floor(((time2 - h)*(1000*60*60))/(1000*60))
+				// let s = Math.floor((((time2 - h)*(1000*60*60))/(1000*60) - m)*(1000*60)/1000)
+
+				let h = parseInt(time / 60 / 60 % 24)
+				h = h < 10 ? '0' + h : h
+				let m = parseInt(time / 60 % 60)
+				m = m < 10 ? '0' + m : m
+				let s = parseInt(time % 60)
+				s = s < 10 ? '0' + s : s
+				return h + ':' + m + ':' + s;
+			}
+
+			return timer()
+		},
+		inputTimecc(e, val) {
+			const inputRule = /^(0+)|[^\d]+/g;
+			this.$nextTick(function () {
+				this.timecc = e.target.value.replace(inputRule, '') + '';
+				if (this.timecc) {
+					this.iszhineng = false
+				}
+			})
+		},
+		//自定义时间
+		customize() {
+			// this.time = -1;
+			this.Chargingtime = true;
+			this.iszhineng = false;
+			// this.timecc = 0 + '';
+		},
+		checktime(index, item, iszhineng) {
+			this.iszhineng = iszhineng
+			this.timecc = item.time;
+			if (item.chargeType == 3001) {
+				this.type = 8001;
+				this.Chargingtime = true;
+			} else {
+				this.type = 8002;
+				this.Chargingtime = false;
+			}
+			this.time = index;
+			this.input = "";
+			if (this.portId) {
+				this.successShow = true
+			}
+		},
+		choosePort(item) {
+			if (item.state == 'N') {
+				this.portId = item.id;
+				this.portName = item.name;
+				this.pkaddress = item.pkaddress;
+			} else if (item.state == 'Y') {
+				uni.showToast({
+					title: '端口占用,请使用其他端口！',
+					icon: 'none',
+				})
+			} else if (item.state == 'F') {
+				uni.showToast({
+					title: '端口故障，请使用其他端口！',
+					icon: 'none',
+				})
+			}
+			if (this.timecc || this.iszhineng) {
+				this.successShow = true;
+			}
+		},
+		/**
+		 * 更具设备号获取设备端口
+		 */
+		getChargingPileData() {
+			const data = {
+				openId: this.openId,
+				key: this.key
+			}
+			getChargingPileData(data).then(res => {
+				if (res.code == 0) {
+					this.item = res.data.list.sort((a, b) => a.deviceid - b.deviceid);
+					this.id = res.data.id;
+					this.pkaddress = res.data.pkaddress;
+					this.pkname = res.data.pkname;
+					this.regionName = res.data.regionName;
+					this.province = res.data.province;
+					this.city = res.data.city;
+					this.plotName = res.data.plotName;
+					this.pileType = res.data.pileType;
+					// //获取计费规则
+					this.carPilePrice();
+					let gunno = uni.getStorageSync('gunno')
+					if (this.item && this.item.length > 0) {
+						// 设置默认值
+						if (gunno) {
+							uni.removeStorageSync('gunno')
+							uni.removeStorageSync('sid')
+							for (var i = 0; i < this.item.length; i++) {
+								let port = this.item[i]
+								if (port.deviceid == gunno) {
+									this.portId = port.id
+									this.portName = port.name;
+								}
+							}
+						} else {
+							this.portId = this.item[0].id
+							this.portName = this.item[0].name;
+						}
+					}
+
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'error',
+					})
+				}
+			})
+		},
+		/**
+		 * 获取账户余额
+		 */
+		queryAccountBalance() {
+			const data = {
+				openId: this.openId
+			}
+			getBalance(data).then(res => {
+				if (res.code == 0) {
+					this.accountAmount = res.data.accountAmount;
+					this.cardAmount = res.data.cardAmount;
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'error',
+					})
+				}
+			})
+		},
+		/**
+		 * 获取计费规则
+		 */
+		carPilePrice() {
+			const data = {
+				openId: this.openId,
+				pileId: this.id
+			}
+			getCarPilePrice(data).then(res => {
+				if (res.code == 0) {
+					this.feeTips = res.data.reverse();
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'error',
+					})
+				}
+			})
+		},
+		/**
+		 * 获取广告
+		 */
+		showAdvert() {
+			uni.request({
+				url: app.api + '/me.do?method=showAdvert&showPage=1001&search_openId=' + this.openid,
+				method: 'POST',
+				header: {
+					'Content-Type': 'application/json',
+				},
+				data: {},
+				success: res => {
+					if (res.data.code == 0) {
+						this.advert = res.data.result;
+					} else {
+						//uni.showToast({title:res.data.msg,icon:'error',})
+					}
+				},
+				fail: () => {
+					uni.showToast({
+						title: '网络错误！',
+						icon: 'error',
+					})
+				}
+			});
+		},
+		// 选中预付款价格
+		checkPayMoney(index) {
+			this.moneyIndex = index
+		},
+		/**
+		 * 开始充电
+		 */
+		saveOrder() {
+			const data = {
+				openId: this.openId,
+				orderType: this.type,
+				portId: this.portId,
+				hour: this.timecc || '',
+				payType: 1
+			}
+			saveOrder(data).then(res => {
+				if (res.code == 0) {
+					this.getOrderDetail(res.data.id);
+				} else if (res.code == 3004) {
+					this.ygbzbox = true;
+					this.maskpan = true;
+				} else {
+					uni.showToast({
+						title: res.msg,
+						icon: 'error',
+					})
+				}
+			})
+		},
+		/**
+		 * 开始充电
+		 */
+		getOrderDetail(orderNumber) {
+			const data = {
+				id: orderNumber,
+				openId: this.openId
+			}
+			single(data).then(res => {
+				if (res.code == 0) {
+					console.log(this.orderInfo);
+					this.orderInfo = res.data;
+
+					this.orderInfo.startTime = this.formatTimestamps(new Date().getTime(),
+						"yyyy-mm-dd hh:mi:ss")
+					this.showtype = 2;
+					this.maskpan = true;
+					uni.setNavigationBarTitle({
+						title: '连接中'
+					})
+
+					this.connectSocket(this.orderInfo.ordernumber);
+
+					if (this.orderInfo.lossChargeKwh) {
+						this.scoketData.hasChargePower = this.orderInfo.lossChargeKwh
+					}
+					if (this.orderInfo.electricity) {
+						this.scoketData.electricity = this.orderInfo.electricity
+					}
+					if (this.orderInfo.voltage) {
+						this.scoketData.voltage = this.orderInfo.voltage
+					}
+
+					if (this.orderInfo.voltage && this.orderInfo.electricity) {
+
+						this.scoketData.realTimePower = (parseFloat(this.orderInfo.voltage) * parseFloat(this.orderInfo.electricity)).toFixed(4)
+						console.log("electricity", this.scoketData.realTimePower);
+					}
+					if (this.orderInfo.serviceFee) {
+						this.scoketData.serviceFee = this.orderInfo.serviceFee
+					}
+					if (this.orderInfo.chargeFee) {
+						this.scoketData.powerFee = this.orderInfo.chargeFee
+					}
+					if (this.orderInfo.serviceFee && this.orderInfo.chargeFee) {
+						this.scoketData.totalFee = (parseFloat(this.orderInfo.serviceFee) + parseFloat(this.orderInfo.chargeFee)).toFixed(4)
+					}
+					if (this.orderInfo.preEndMin) {
+						this.scoketData.preEndMin = this.orderInfo.preEndMin
+					}
+					if (this.orderInfo.soc) {
+						this.scoketData.soc = this.orderInfo.soc
+					}
+				}
+			})
+		},
+		getOrderDetailEnd(orderNumber) {
+			const data = {
+				id: orderNumber,
+				openId: this.openId
+			}
+			single(data).then(res => {
+				if (res.code == 0) {
+					this.orderInfo = res.data;
+					this.orderInfo.endTime = this.formatTimestamps(new Date().getTime(), "yyyy-mm-dd hh:mi:ss")
+					this.poptt = false;
+					this.showtype = 4;
+					this.maskpan = true;
+					uni.setNavigationBarTitle({
+						title: '充电完成'
+					})
+					if (this.orderInfo.orderstate == 6) {
+						this.updateSettlementOrder()
+					}
+				}
+			})
+		},
+		updateSettlementOrder() {
+			const data = {
+				id: this.orderInfo.id,
+				openId: this.openId
+			}
+			this.settlementTimer = setInterval(() => {
+				single(data).then(res => {
+					if (res.code == 0) {
+						this.orderInfo = res.data;
+					}
+				})
+			}, 3000);
+		},
+		userCancelOrderConfirm() {
+			this.poptt = true;
+			this.maskpan = true;
+		},
+		userCancelOrder() {
+			var _this = this;
+			_this.isClose = true;
+			if (_this.socketTask) {
+				_this.socketTask.close();
+			}
+
+			clearInterval(this.totTimeTimer);
+			const data = {
+				id: this.orderInfo.id,
+				openId: this.openId
+			}
+			endCharging(data)
+				.then(res => {
+					if (res.code == 0) {
+						this.getOrderDetailEnd(this.orderInfo.id);
+					} else {
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none',
+						})
+					}
+				})
+
+		},
+		goIndex() {
+			uni.switchTab({
+				url: '/pages/index/index'
+			})
+		},
+		//连接websocket
+		connectSocket(orderNumber) {
+			if (!orderNumber) {
+				return;
+			}
+			let that = this;
+			this.socketTask = uni.connectSocket({
+				url: app.scoketip + orderNumber,
+				success(res) {
+					that.showtype = 3
+					that.maskpan = false
+					uni.setNavigationBarTitle({
+						title: '充电中'
+					})
+				},
+				fail(err) {
+					console.log("connectSocket fail", err)
+				}
+			});
+			this.socketTask.onOpen(function (res) {
+				that.isSuccess = true
+				that.showtype = 3;
+				that.maskpan = false;
+
+			})
+			this.socketTask.onMessage(function (res) {
+				let scoketData = JSON.parse(res.data);
+				if (scoketData.soc) {
+					that.scoketData = scoketData
+				}
+				// that.scoketData = scoketData
+				that.statusCode = scoketData.statusCode
+				switch (that.statusCode) {
+					case 2:
+						that.modalText = '用户未插枪，订单已取消'
+						that.modalShow = true
+						clearInterval(that.timer)
+						clearInterval(that.socketTimer)
+						clearInterval(that.totTimeTimer)
+						that.title3 = "充电已取消"
+						break;
+					case 3:
+						that.modalText = '充电已完成'
+						that.modalShow = true
+						clearInterval(that.timer)
+						clearInterval(that.socketTimer)
+						clearInterval(that.totTimeTimer)
+						that.title3 = "充电已完成"
+						break;
+					default:
+						break;
+				}
+				that.loading = false
+				let nowTime = new Date()
+				let pastTime = Date.parse(nowTime) - Date.parse(scoketData.startTime)
+				// let pastTime = (nowTime - new Date(that.scoketData.startTime))/ (1000*60*60)
+				// let h = Math.floor(pastTime)
+				// let m = ((pastTime - h)*(1000*60*60))/(1000*60)
+				if (that.showtype == 3 && that.socketNum == 0) {
+					that.totTime = pastTime / 1000
+					that.socketNum++
+					that.socketTimer = setInterval(() => {
+						that.totTime++
+					}, 1000)
+				}
+				// that.toHoursAndMinutes()
+			});
+
+
+			this.socketTask.onError((e) => {
+				this.isSuccess = false
+				//进入重新连接
+				this.reconnect();
+			})
+			// // 监听连接关闭 -
+			this.socketTask.onClose((e) => {
+				clearInterval(that.timer)
+				clearInterval(that.socketTimer)
+				clearInterval(that.totTimeTimer)
+				clearInterval(that.settlementTimer)
+				that.timer = ''
+				if (!that.isClose) {
+					that.reconnect()
+				}
+			})
+		},
+		//进入重新连接
+		reconnect() {
+			// this.socketTask.close();
+			this.socketTask = null;
+			this.connectSocket(this.orderInfo.ordernumber)
+		},
+		//发送消息
+		sendSocketMessage(msg) {
+			return new Promise((reslove, reject) => {
+				this.socketTask.send({
+					data: msg,
+					success(res) {
+						reslove(res)
+					},
+					fail(res) {
+						reject(res)
+					}
+				});
+			})
+
+		},
+
+		//心跳
+		heart() {
+			let that = this;
+			clearInterval(this.timer);
+			this.timer = '';
+			let msg = {
+				"type": "heartbeat",
+			}
+			this.timer = setInterval(() => {
+				that.sendSocketMessage(JSON.stringify(msg)).then(res => {
+				}).catch(res => {
+				})
+
+			}, 200000)
+		},
+		start() {
+			if (!this.portId) {
+				uni.showToast({
+					title: '请选择充电枪！',
+					icon: 'error',
+					success() {
+
+					}
+				});
+				return;
+			}
+			if (this.iszhineng) {
+				this.showbox = true;
+				this.maskpan = true;
+			} else {
+				if (!this.timecc || isNaN(this.timecc)) {
+					uni.showToast({
+						title: '请输入时长！',
+						icon: 'error',
+						success() {
+
+						}
+					});
+					return;
+				}
+				if (this.timecc < 0 || this.timecc > 120) {
+					uni.showToast({
+						title: '时长范围1～120',
+						icon: 'error',
+						success() {
+
+						}
+					});
+					return;
+				}
+				this.showbox = true;
+				this.maskpan = true;
+			}
+		},
+		confirm: function () {
+			this.showbox = false;
+			this.maskpan = false;
+			if (this.indicatorDots == 0) {
+				const data = {
+					orderPreMoney: this.paymentMethods[this.moneyIndex].name,
+					openId: this.openId,
+					orderType: this.type,
+					portId: this.portId,
+					hour: this.timecc || '',
+					payType: 2
+				}
+				saveOrder(data).then(res => {
+					if (res.code == 0) {
+						uni.navigateTo({
+							url: `/pages/index/payment/payment?orderPreMoney=${this.paymentMethods[this.moneyIndex].name}&orderId=${res.data.id}&portId=${this.portId}&hour=${this.timecc}&orderType=${this.type}`
+						})
+					} else if (res.code == 3004) {
+						this.ygbzbox = true;
+						this.maskpan = true;
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: 'error',
+						})
+					}
+				})
+			} else {
+				// if (this.accountAmount * 1 < 10) {
+				// 	this.ygbzbox = true;
+				// 	this.maskpan = true;
+				// 	return;
+				// }
+				this.saveOrder();
+			}
+
+		},
+		cancel: function () {
+			this.showbox = false;
+			this.maskpan = false;
+		},
+	},
+	watch: {
+		showtype(newval, oldval) {
+
+		}
+	},
+	onUnload() {
+		//  if (this.totTimeTimer !== null) {
+		//  	clearInterval(this.totTimeTimer);
+		//  }
+		if (this.settlementTimer !== null) {
+			clearInterval(this.settlementTimer);
+		}
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+.main {
+	background: #F6F6F6;
+	width: 100vw;
+	min-height: calc(100vh - 50px);
+	overflow: auto;
+	padding-bottom: 150rpx;
+
+	.cdwc_tc {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		font-size: 28rpx;
+		font-family: PingFangSC, PingFang SC;
+		font-weight: 400;
+
+		image {
+			width: 84rpx;
+			height: 84rpx;
+			margin-bottom: 32rpx;
+		}
+	}
+
+	.cdxq_tc {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		font-size: 28rpx;
+		font-family: PingFangSC, PingFang SC;
+		font-weight: 400;
+
+		.item {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			view:nth-child(1) {
+				color: #999999;
+				font-size: 28rpx;
+				font-family: PingFang-SC, PingFang-SC;
+				font-weight: 400;
+				margin-bottom: 24rpx;
+			}
+
+			view:nth-child(2) {
+				max-width: 400rpx;
+				font-size: 28rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+			}
+		}
+
+	}
+
+	.cd_tc {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		font-size: 28rpx;
+		font-family: PingFangSC, PingFang SC;
+		font-weight: 400;
+
+		image {
+			width: 84rpx;
+			height: 84rpx;
+		}
+
+		view:nth-child(2) {
+			font-size: 32rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 500;
+			margin: 16rpx 0;
+		}
+
+		view:nth-child(3) {
+			font-size: 28rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 400;
+			color: rgba(0, 0, 0, 0.42);
+		}
+	}
+}
+
+.change {
+
+	.nav-bar {
+
+		background: #5997FE;
+
+		.search {
+			box-sizing: border-box;
+			color: #fff;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+
+			.fh {
+				padding-left: 32rpx;
+
+				image {
+					width: 16rpx;
+					height: 30rpx;
+				}
+			}
+
+			.return {
+				height: 30px;
+				text-align: center;
+				line-height: 30px;
+
+			}
+		}
+
+	}
+
+	.change-con {
+		padding: 32rpx;
+		box-sizing: border-box;
+
+
+		.pileInformation {
+			padding: 16rpx 32rpx;
+			background: #FFFFFF;
+			border-radius: 16rpx;
+			box-sizing: border-box;
+			margin-bottom: 16rpx;
+
+			.name {
+				font-size: 36rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 500;
+				letter-spacing: 1px;
+				margin-bottom: 12rpx;
+			}
+
+			.address {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: rgba(0, 0, 0, 0.45);
+				margin-bottom: 10rpx;
+
+				image {
+					width: 20rpx;
+					height: 22.11rpx;
+				}
+			}
+
+			.numbering {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.title-l {
+					font-size: 30rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					color: #000000;
+					letter-spacing: 1px;
+				}
+
+				.title-r {
+					border-radius: 8rpx;
+					border: 2rpx solid #5997FE;
+					font-size: 28rpx;
+					padding: 6rpx 12rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					color: #5997FE;
+					letter-spacing: 1px;
+				}
+			}
+
+		}
+
+		.device_port_name {
+			display: flex;
+			align-items: center;
+			margin-bottom: 16rpx;
+
+			&::before {
+				content: "";
+				display: block;
+				width: 6rpx;
+				height: 28rpx;
+				background: #5997FE;
+				border-radius: 4rpx;
+				margin-right: 22rpx;
+			}
+		}
+
+		.device_port {
+			margin-bottom: 32rpx;
+
+			.device_port_content {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 16rpx 32rpx;
+				padding: 16rpx 32rpx;
+				box-sizing: border-box;
+				background: #fff;
+				border-radius: 16rpx;
+
+				.device_port_list {
+					display: grid;
+					place-content: center;
+					border-radius: 16rpx;
+					border: 2rpx solid #5997FE;
+					font-size: 28rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 500;
+					color: #5997FE;
+					height: 74rpx;
+					position: relative;
+					overflow: hidden;
+
+					.cornerMarkers {
+						position: absolute;
+						display: grid;
+						place-content: center;
+						top: 0;
+						right: 0;
+						width: 100rpx;
+						height: 33rpx;
+						font-size: 18rpx;
+						color: #fff;
+						background-color: red;
+						border-radius: 0 0 0 25rpx;
+					}
+				}
+
+				.selected {
+					color: #fff;
+					background: #5997FE;
+				}
+			}
+		}
+
+		.charging_time {
+			margin-bottom: 32rpx;
+
+			.charging_time_content {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 16rpx 46rpx;
+				background: #fff;
+				border-radius: 16rpx;
+				padding: 24rpx 32rpx;
+				box-sizing: border-box;
+
+				.charging_time_list {
+					display: grid;
+					place-content: center;
+					border-radius: 16rpx;
+					border: 2rpx solid #5997FE;
+					color: #5997FE;
+
+					.input {
+						text-align: center;
+					}
+				}
+
+				.selected {
+					color: #fff;
+					background: #5997FE;
+				}
+			}
+		}
+
+		.payment_methods {
+			margin-bottom: 32rpx;
+
+			.payment_methods_content {
+				background: #fff;
+				border-radius: 16rpx;
+				padding: 24rpx 32rpx;
+				box-sizing: border-box;
+
+				.tab {
+					display: grid;
+					grid-template-columns: repeat(2, 1fr);
+					padding-bottom: 24rpx;
+
+					.tab_list {
+						display: grid;
+						place-content: center;
+
+						&::after {
+							content: "";
+							display: block;
+							width: 100%;
+							height: 8rpx;
+							background: transparent;
+							border-radius: 4rpx;
+						}
+					}
+
+					.selected {
+						color: #5997FE;
+
+						&::after {
+							background: #5997FE;
+						}
+					}
+				}
+
+				.content {
+					// height: 420rpx;
+
+					.swiper {
+						height: 100%;
+
+						.swiper_item {
+							.advance {
+								height: 64rpx;
+								background: #5997FE;
+								border-radius: 52rpx;
+								margin-top: 24rpx;
+								display: grid;
+								place-content: center;
+								color: #fff;
+								font-size: 28rpx;
+								font-family: PingFangSC, PingFang SC;
+								font-weight: 400;
+							}
+
+							.text {
+								font-size: 24rpx;
+								font-family: PingFangSC, PingFang SC;
+								font-weight: 400;
+								color: rgba(0, 0, 0, 0.44);
+							}
+
+							.content {
+								display: grid;
+								grid-template-columns: repeat(3, 1fr);
+								gap: 16rpx 46rpx;
+								// height: 262rpx;
+								margin-top: 16rpx;
+
+								.list {
+									border-radius: 16rpx;
+									border: 2rpx solid #5997FE;
+									font-size: 28rpx;
+									font-family: PingFangSC, PingFang SC;
+									font-weight: 400;
+									color: #5997FE;
+									height: 80rpx;
+									display: grid;
+									place-content: center;
+								}
+
+								.selected {
+									color: #fff;
+									background: #5997FE;
+								}
+							}
+
+							.account_balance_list {
+								padding: 24rpx 32rpx;
+								box-sizing: border-box;
+								background: #E5F2FF;
+								border-radius: 16rpx;
+								display: flex;
+								// justify-content: space-between;
+								align-items: center;
+
+								.imgIcon {
+									width: 48rpx;
+									height: 48rpx;
+									margin-right: 12rpx;
+
+									image {
+										width: 100%;
+										height: 100%;
+									}
+
+								}
+
+								.name {
+									font-size: 24rpx;
+									font-family: PingFangSC, PingFang SC;
+									font-weight: 400;
+									color: #1B1B1B;
+								}
+
+								.amount {
+									font-size: 28rpx;
+									font-family: PingFangSC, PingFang SC;
+									font-weight: 500;
+									color: #1B1B1B;
+								}
+
+								.goChongZhi {
+									padding: 12rpx 18rpx;
+									text-align: center;
+									border-radius: 48rpx;
+									border: 2rpx solid #5997FE;
+									color: #5997FE;
+									font-size: 24rpx;
+									margin-left: 12rpx;
+								}
+							}
+
+
+						}
+					}
+				}
+			}
+
+		}
+
+		.billing_standards {
+			margin-bottom: 32rpx;
+
+			.font_list {
+				view {
+					font-size: 26rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					color: rgba(0, 0, 0, 0.51);
+				}
+			}
+		}
+
+		.bottom_view {
+			position: fixed;
+			width: 100%;
+			left: 0;
+			bottom: 0;
+			background-color: #fff;
+			display: flex;
+			justify-content: center;
+			padding: 32rpx 0;
+			border-radius: 32rpx;
+			border: 1rpx solid #eeeeee;
+
+			.change_btn {
+				width: 686rpx;
+				height: 104rpx;
+				background: #5997FE;
+				border-radius: 52rpx;
+				color: #fff;
+				display: grid;
+				place-content: center;
+			}
+		}
+
+
+	}
+
+}
+
+
+
+
+
+
+
+.change-top,
+.change-btm {
+	padding: 10px;
+}
+
+.change-btm {
+	padding: 0 10px 10px;
+}
+
+.change-top .tit {
+	color: #c8d1f4;
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+.change-top .tit-msg {
+	color: #5C6E99;
+	font-size: 12px
+}
+
+.change-top .tit-msg image {
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+
+.change-link {
+	background-color: #041131;
+}
+
+.change-tit {
+	position: relative;
+	padding: 20px 10px;
+}
+
+.change-tit .tit-l {
+	position: relative;
+	font-size: 16px;
+	color: #cfd9f3;
+	margin-left: 10px;
+	margin-left: 20px;
+}
+
+.change-tit .tit-l::after {
+	content: "";
+	position: absolute;
+	top: 4px;
+	left: -20px;
+	width: 4px;
+	height: 15px;
+	border-radius: 10px;
+	background: linear-gradient(to top, #0054c1, #2397f1);
+
+}
+
+.tit-r {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	font-size: 14px;
+	padding: 5px 10px;
+	border: 1px solid #3168a1;
+	background-color: #0d1b3f;
+	border-radius: 5px;
+	color: #568ac1;
+	height: 20px;
+	line-height: 20px;
+	margin-top: -15px;
+
+}
+
+.change-btm .change-tit .tit-l {
+	margin-left: 10px;
+}
+
+.change-list {
+	display: flex;
+	justify-content: space-between;
+	// align-items: baseline;
+	flex-flow: wrap
+}
+
+.change-list .list {
+	position: relative;
+	width: 30%;
+	padding: 10px 0;
+	color: #425496;
+	border: 1px solid #134081;
+	background-color: rgba(6, 20, 55, .6);
+	border-radius: 8px;
+	text-align: center;
+	margin-bottom: 10px;
+
+	// color: #;
+}
+
+.change-list view .top {
+	position: absolute;
+	top: 0px;
+	right: 0.5px;
+	border-radius: 0 3px 0 3px;
+	font-size: 12px;
+	color: #fff;
+	background-color: #d00b0b;
+	padding: 1px 4px;
+
+}
+
+// .change-list.list-line  view {
+// 	height: 40px;
+// 	line-height: 40px;
+// 	padding: 0;
+
+// }
+.change-list.list-line .input {
+	width: 100%;
+	height: 44px;
+	line-height: 44px;
+	border-radius: 3px;
+	border: 1px solid #134081;
+	padding: 0 10px;
+	background-color: rgba(6, 20, 55, .6);
+	border-radius: 8px;
+	vertical-align: middle;
+	color: #aebacc;
+	box-sizing: border-box;
+}
+
+.list-line .list {
+	width: 30%;
+
+}
+
+.list-line .btn {
+	width: 30%;
+	color: #fff;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 8px;
+	text-align: center;
+	background-color: #224170;
+	border-radius: 8px;
+}
+
+.font-list view {
+	font-size: 14px;
+	line-height: 23px;
+	color: #5C6E99;
+}
+
+.change-btn {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	font-size: 16px;
+	color: #fff;
+	background-color: #033a8e;
+	text-align: center;
+	// border-radius: 8px;
+	// margin-top: 20px;
+}
+
+.list-c .list {
+	width: 45%;
+}
+
+.change-list .active {
+	border-color: #1fc4f2;
+	color: #1fc4f2;
+}
+
+.color .list {
+	color: #aebacc;
+}
+
+
+.mask {
+	position: fixed;
+	z-index: 2;
+	width: 100vw;
+	height: 100vh;
+	background-color: #000;
+	opacity: 0.6;
+	top: 0;
+}
+
+.vox-main {
+	position: fixed;
+	top: 15%;
+	padding: 10px 0px 0 0;
+	width: 90%;
+	color: #9999ff;
+	background: #06153b;
+	z-index: 3;
+	border-radius: 10px;
+	left: 5%;
+	font-size: 14px;
+}
+
+.vox-main .close {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	width: 15px;
+	height: 15px;
+}
+
+.vox-main .title {
+	padding: 0 15px;
+	text-align: left;
+	margin: 5px;
+	font-size: 18px;
+	color: #97AEE7;
+}
+
+.vox-main .contt {
+	padding: 10px 20px;
+}
+
+.vox-main .contt .item {
+	display: flex;
+	justify-content: space-between;
+	line-height: 23px;
+	border-bottom: 1px solid #0f214c;
+	margin: 14px 0;
+	padding-bottom: 12px;
+	color: #97AEE7;
+}
+
+.vox-main .contt .item .labdett {
+	width: 58px;
+	color: #617BBD;
+}
+
+.toos {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 15px 20px 15px;
+}
+
+.toos .btnn {
+	font-size: 16px;
+	padding: 12px 45px;
+	border-radius: 5px;
+	color: #DDDDDD;
+}
+
+.toos .cancel {
+	background-color: #3a4e6c;
+}
+
+.toos .confirm {
+	background: #033a8e;
+	color: #fff;
+}
+
+.success-box {
+	text-align: center;
+	margin: 30px 10px 10px 10px;
+	/* background: rgba(27,62,108,.6); */
+	border-radius: 8px;
+	position: relative;
+	color: #fff;
+	font-size: 14px;
+}
+
+/* .success-box image{
+		width: 40px;
+		height: 40px;
+	} */
+.success-box image {
+	width: 130px;
+	height: 130px;
+	margin-bottom: 20px;
+}
+
+.success-box .kscd {
+	text-align: center;
+	/* border-bottom: 1px solid hsla(0,0%,100%,.1); */
+	padding: 40px 0 20px 0;
+}
+
+.success-box .item {
+	display: flex;
+	padding: 10px;
+	justify-content: space-between;
+}
+
+
+.infobox {
+	position: fixed;
+	width: 80%;
+	left: 10%;
+	top: 20%;
+	background-color: #06153B;
+	border-radius: 10px;
+	z-index: 3;
+}
+
+.infobox .top-infod {
+	padding: 40px 20px 30px 35px;
+	text-align: center;
+}
+
+.infobox .top-infod image {
+	width: 115rpx;
+	height: 115rpx;
+}
+
+.infobox .info-txt {
+	color: #dbe2fd;
+	text-align: center;
+	line-height: 1.7;
+	margin-bottom: 45px;
+}
+
+.infobox .close {
+	position: absolute;
+	bottom: -60px;
+	right: calc(50% - 20px);
+	width: 40px;
+	height: 40px;
+}
+
+.czd-box {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-color: #F6F6F6;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+	z-index: 6;
+	// padding-bottom: 50px;
+	overflow-y: auto;
+
+
+	.box {
+		background: linear-gradient(180deg, #5997FE 0%, #5997FE 24%, rgba(89, 151, 254, 0) 100%);
+
+		.nav-bar {
+
+			.search {
+				box-sizing: border-box;
+
+				.fh {
+					padding-left: 32rpx;
+
+					image {
+						width: 16rpx;
+						height: 30rpx;
+					}
+				}
+
+				.return {
+					color: #fff;
+					height: 30px;
+					text-align: center;
+					line-height: 30px;
+
+				}
+			}
+
+		}
+
+		.mains {
+			height: calc(100% - var(--height-bar));
+			overflow: auto;
+
+			.top-bg-box {
+				height: 37%;
+				display: grid;
+				place-content: center;
+				margin-bottom: 20rpx;
+
+				image {
+					width: 100vw;
+				}
+
+				.txtbb {
+					width: 420rpx;
+					height: 420rpx;
+					display: grid;
+					place-content: center;
+					position: relative;
+
+					image {
+						width: 100%;
+						height: 100%;
+						position: absolute;
+					}
+
+					.nei {
+						animation: rotateAnimation 5s linear infinite;
+					}
+
+					@keyframes rotateAnimation {
+						from {
+							transform: rotate(0deg);
+						}
+
+						to {
+							transform: rotate(360deg);
+						}
+					}
+
+					.number {
+						color: #fff;
+						font-size: 76rpx;
+						font-family: PingFang-SC, PingFang-SC;
+						font-weight: bold;
+						text-align: center;
+						width: 100%;
+
+						span {
+							font-size: 38rpx;
+						}
+					}
+
+					.time {
+						color: #fff;
+						font-size: 40rpx;
+						font-family: PingFangSC, PingFang SC;
+						font-weight: 400;
+						text-align: center;
+						width: 100%;
+					}
+				}
+
+
+			}
+
+
+			.box-contt {
+				color: #fff;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+
+				.list {
+					flex: 1;
+
+					.content {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						margin-bottom: 20rpx;
+
+						span:nth-child(1) {
+							font-size: 32rpx;
+							font-family: PingFangSC, PingFang SC;
+							font-weight: 500;
+							margin-bottom: 12rpx;
+						}
+
+						span:nth-child(2) {
+							font-size: 26rpx;
+							font-family: PingFangSC, PingFang SC;
+							font-weight: 400;
+							color: #5B98FD;
+						}
+					}
+				}
+
+				.line {
+					height: 128rpx;
+					opacity: 0.4;
+					border: 2rpx solid #FFFFFF;
+				}
+			}
+
+			.box-cont {
+				margin: 0 32rpx;
+				background: #fff;
+				padding: 32rpx;
+				box-sizing: border-box;
+				border-radius: 16rpx;
+
+				.list {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					font-size: 28rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					color: #000000;
+					padding-bottom: 24rpx;
+
+
+					view:nth-child(1) {
+						display: flex;
+						align-items: center;
+
+						image {
+							width: 24rpx;
+							height: 24rpx;
+							margin-right: 8rpx;
+						}
+					}
+
+					view:nth-child(2) {}
+				}
+
+				.list:not(:first-child) {
+					padding-top: 24rpx;
+				}
+
+				.list:not(:last-child) {
+					border-bottom: 2rpx solid #F5F5F5;
+				}
+			}
+		}
+
+		.box-btn {
+			// margin-top: 22rpx;
+			display: grid;
+			place-content: center;
+
+			view {
+				width: 686rpx;
+				height: 104rpx;
+				background: #5997FE;
+				border-radius: 52rpx;
+				display: grid;
+				place-content: center;
+				color: #fff;
+				font-size: 28rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+			}
+		}
+	}
+}
+
+
+
+.order-detal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	width: 100vw;
+	height: 100vh;
+	background-color: #F6F6F6;
+	color: #020f2f;
+	/* padding: 15px; */
+	box-sizing: border-box;
+
+	.nav-bar {
+
+		background: #5997FE;
+
+		.search {
+			box-sizing: border-box;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+
+			.fh {
+				padding-left: 32rpx;
+
+				image {
+					width: 16rpx;
+					height: 30rpx;
+				}
+			}
+
+			.return {
+				height: 30px;
+				text-align: center;
+				line-height: 30px;
+
+			}
+		}
+
+	}
+}
+
+.order-con {
+	padding: 32rpx;
+	margin: 0 32rpx;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 16rpx;
+
+	.ord-list {
+		.list-tit {
+			font-size: 28rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 500;
+			color: #5997FE;
+			display: flex;
+			align-items: center;
+
+			&::before {
+				content: "";
+				display: block;
+				width: 6rpx;
+				height: 30rpx;
+				background: #5997FE;
+				border-radius: 12rpx;
+				margin-right: 12rpx;
+			}
+		}
+
+		.list-item {
+
+			.list-con {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 8rpx 0;
+
+				span:nth-child(1) {
+					font-size: 28rpx;
+					font-family: PingFang-SC, PingFang-SC;
+					font-weight: 400;
+					color: rgba(0, 0, 0, 0.45);
+				}
+
+				span:nth-child(2) {
+					font-size: 28rpx;
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					color: #000000;
+				}
+			}
+		}
+	}
+}
+
+/* .order-con .ord-list .list-tit {
+	font-size: 14px;
+	color: #c3cef9;
+	margin-top: 20px;
+} */
+
+/* .order-con .ord-list .list-con {
+	font-size: 14px;
+	color: #5C6E99;
+	margin-top: 5px;
+}
+
+.order-con .ord-list .list-line {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.order-con .ord-list .list-line .font {
+	color: #6585ff;
+}
+
+.order-con .ord-list .list-line .font-size {
+	font-size: 16px;
+} */
+
+.order-top {
+	text-align: center;
+	padding-bottom: 20px;
+}
+
+.order-top .tit {
+	padding-top: 10px;
+	color: #6B8AD9;
+	font-size: 14px;
+}
+
+.order-top image {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	margin: 15px 0;
+}
+
+.order-top .tit-con {
+	color: #5997FE;
+	font-size: 18px;
+
+}
+
+.order-btn {
+	margin: 40px 32rpx 0;
+	width: 686rpx;
+	height: 104rpx;
+	background: #5997FE;
+	border-radius: 52rpx;
+	display: grid;
+	place-content: center;
+	font-size: 28rpx;
+	font-family: PingFangSC, PingFang SC;
+	font-weight: 400;
+	color: #FFFFFF;
+}
+
+/* ::v-deep .u-modal {
+	width: auto !important;
+
+	.u-modal__content {
+		padding: 0;
+	}
+}
+
+::v-deep .u-popup__content {
+	background-color: #041747 !important;
+	padding: 60rpx 0;
+
+	.u-modal__button-group__wrapper__text {
+		color: #6D7AB0 !important;
+		background: #17367D !important;
+		border-radius: 50rpx !important;
+		padding: 20rpx 70rpx;
+	}
+
+	.u-line {
+		// border-color: #192E62 !important;
+		display: none;
+	}
+
+	.u-modal__button-group__wrapper--hover {
+		background-color: transparent !important;
+	}
+}
+
+.modalText {
+	color: #C8D1F4 !important;
+	text-align: center;
+	margin: 20rpx;
+}
+
+::v-deep .u-transition {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+::v-deep .u-modal__button-group__wrappe {
+	margin-top: 25rpx !important;
+} */
+
+.font {
+	font-size: 24rpx;
+}
+</style>

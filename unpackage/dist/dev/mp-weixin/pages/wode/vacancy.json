@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的余额",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "uni-data-picker": "/uni_modules/uni-data-picker/components/uni-data-picker/uni-data-picker",
+    "u-loadmore": "/uni_modules/uview-ui/components/u-loadmore/u-loadmore"
+  }
+}

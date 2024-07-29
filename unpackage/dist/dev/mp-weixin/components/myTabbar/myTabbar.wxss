@@ -1,0 +1,127 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.myTabbar {
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  min-height: 120rpx;
+}
+.myTabbar .infobox {
+  position: fixed;
+  width: 80%;
+  left: 10%;
+  top: 20%;
+  background-color: #fff;
+  border-radius: 10px;
+  z-index: 3;
+}
+.myTabbar .infobox .top-infod {
+  padding: 40px 20px 30px 35px;
+  text-align: center;
+}
+.myTabbar .infobox .top-infod image {
+  width: 100px;
+  height: 100px;
+}
+.myTabbar .infobox .info-txt {
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 50px;
+}
+.myTabbar .infobox .close {
+  position: absolute;
+  bottom: -60px;
+  right: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+}
+.myTabbar .myTabbar_main {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  height: 98rpx;
+}
+.myTabbar .myTabbar_main .list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.myTabbar .myTabbar_main .list .text {
+  width: 40rpx;
+  height: 28rpx;
+  font-family: PingFang SC, PingFang SC;
+  font-weight: 400;
+  font-size: 20rpx;
+  color: var(--text-color);
+  /* color: #5995FE; */
+}
+.myTabbar .myTabbar_main .list:nth-child(1) {
+  grid-column-start: 2;
+  /* 第一个元素从第 2 列开始 */
+  grid-column-end: 3;
+  /* 第一个元素结束于第 3 列 */
+}
+.myTabbar .myTabbar_main .list:nth-child(2) {
+  grid-column-start: 5;
+  /* 第二个元素从第 5 列开始 */
+  grid-column-end: 6;
+  /* 第二个元素结束于第 6 列 */
+}
+.myTabbar .myTabbar_main .list:nth-child(3) {
+  grid-column-start: 11;
+  /* 第三个元素从第 11 列开始 */
+  grid-column-end: 12;
+  /* 第三个元素结束于第 12 列 */
+}
+.myTabbar .myTabbar_main .list:nth-child(4) {
+  grid-column-start: 14;
+  /* 第四个元素从第 14 列开始 */
+  grid-column-end: 15;
+  /* 第四个元素结束于第 15 列 */
+}
+.myTabbar .img {
+  /* width: 120rpx;
+		height: 120rpx; */
+  position: absolute;
+  top: 0;
+  margin-left: 50%;
+  -webkit-transform: translate(-50%, -30rpx);
+          transform: translate(-50%, -30rpx);
+  padding: 8rpx;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #fff;
+}
+.myTabbar .img image {
+  width: 112rpx;
+  height: 112rpx;
+  box-shadow: 0 12rpx 17rpx 1rpx rgba(26, 110, 255, 0.3);
+  border-radius: 50%;
+}
+

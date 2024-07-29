@@ -1,0 +1,178 @@
+<template>
+	<view class="contianer">
+		<view class="nav">
+			<u-navbar :titleStyle="titleStyle" title="常用发票抬头" :autoBack="true" bgColor="transparent" :fixed="false"
+				leftIconColor="#ffffff">
+
+			</u-navbar>
+		</view>
+		<view class="mainView">
+			<view class="inputView">
+				<u--form :model="form" :rules="rules" ref="uForm" labelPosition="left" :borderBottom="false">
+					<u-form-item label="抬头类型" labelWidth="80" >
+						<u-radio-group v-model="form.invoiceType" placement="row" @change="groupChange">
+							<u-radio v-for="(item, index) in radiolist1" :key="index" :label="item.label"
+								:name="item.name" @change="radioChange" shape="circle" iconSize="12" labelSize="14"
+								style="margin-right: 32rpx">
+							</u-radio>
+						</u-radio-group>
+					</u-form-item>
+					<u-form-item label="抬头名称" prop="invoiceHeader" labelWidth="80" v-if="form.invoiceType == 2"
+						>
+						<u-input placeholder="填写抬头名称(必填)" v-model="form.invoiceHeader" border="none">
+
+						</u-input>
+					</u-form-item>
+					<u-form-item label="公司名称" prop="invoiceHeader" labelWidth="80" v-if="form.invoiceType == 1">
+						<u-input placeholder="填写公司名称(必填)" v-model="form.invoiceHeader" border="none">
+
+						</u-input>
+					</u-form-item>
+					<u-form-item label="公司税号" prop="invoiceNumber" labelWidth="80" v-if="form.invoiceType == 1">
+						<u--input placeholder="填写公司税号(必填)" v-model="form.invoiceNumber" border="none"></u--input>
+					</u-form-item>
+					<u-form-item label="注册地址" prop="invoiceAddress" labelWidth="80" v-if="form.invoiceType == 1">
+						<u--input placeholder="填写注册地址" v-model="form.invoiceAddress" border="none"></u--input>
+					</u-form-item>
+					<u-form-item label="注册电话" prop="invoicePhone" labelWidth="80" v-if="form.invoiceType == 1">
+						<u--input type="number" placeholder="填写注册电话" v-model="form.invoicePhone"
+							border="none"></u--input>
+					</u-form-item>
+					<u-form-item label="开户银行" prop="invoiceBank" labelWidth="80" v-if="form.invoiceType == 1">
+						<u--input placeholder="填写开户银行" v-model="form.invoiceBank" border="none"></u--input>
+					</u-form-item>
+					<u-form-item label="银行账号" prop="invoiceBankNumber" labelWidth="80" v-if="form.invoiceType == 1">
+						<u--input placeholder="填写银行账号" v-model="form.invoiceBankNumber" border="none"></u--input>
+					</u-form-item>
+
+				</u--form>
+			</view>
+
+		</view>
+
+		<!-- 默认 -->
+		<view class="defaultView">
+			<view class="leftView">
+				<view class="leftTitle">
+					<text>设为默认抬头</text>
+				</view>
+				<view class="leftDesc">每次开票默认填写该抬头信息</view>
+			</view>
+			<view class="rightView"><u-switch v-model="defaultValue" activeColor="#5995FE"
+					inactiveColor="#eeeeee"></u-switch></view>
+		</view>
+		<view class="bottomView">
+
+			<u-button shape="circle" type="primary" text="保存" @click="submit"></u-button>
+		</view>
+	</view>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			titleStyle: {
+				color: "#ffffff"
+			},
+			form: {
+				invoiceType: 1,
+				invoiceHeader: '',
+				invoiceContainer: '',
+				invoiceNumber: '',//税号
+				invoiceAddress: '',//注册地址
+				invoicePhone: '',//注册电话
+				invoiceBank: '',//开户银行
+				invoiceBankNumber: '',//银行账号
+			},
+			// 基本案列数据
+			radiolist1: [{
+				name: 1,
+				label: '企业单位',
+				disabled: false
+			},
+			{
+				name: 2,
+				label: '个人/非企业',
+
+				disabled: false
+			},
+
+			],
+			// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
+			radiovalue1: 1,
+			rules: {
+				invoiceType: [{
+					required: true,
+					message: '请选择抬头类型',
+					trigger: ['blur', 'change']
+				}],
+				invoiceHeader: [{
+					required: true,
+					message: '请填写发票抬头',
+					trigger: ['blur', 'change']
+				}],
+				invoiceNumber: [{
+					required: true,
+					message: '请填写税号',
+					trigger: ['blur', 'change']
+				}]
+			},
+			defaultValue: false
+		}
+	},
+	methods: {
+		groupChange(e) {
+			console.log(e, 'e')
+			this.form.invoiceType = e
+			console.log('this.form.invoiceType::: ', this.form.invoiceType);
+		},
+		radioChange() { },
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+.contianer {
+	min-height: 100vh;
+	position: relative;
+	background: linear-gradient(180deg, #5995FE 0%, #EFF1F4 50%, #EFF1F4 100%);
+	width: 100vw;
+	padding: 0 32rpx;
+	box-sizing: border-box;
+
+	.mainView {
+		margin-top: 32rpx;
+		background: #FFFFFF;
+		border-radius: 16rpx;
+		padding: 16rpx;
+		box-sizing: border-box;
+	}
+
+	.defaultView {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 16rpx;
+		background: #FFFFFF;
+		border-radius: 16rpx;
+		padding: 16rpx;
+		box-sizing: border-box;
+
+		.leftDesc {
+			color: #999999;
+			font-size: 24rpx;
+			margin-top: 8rpx;
+		}
+
+
+	}
+
+	.bottomView {
+		position: absolute;
+		left: 32rpx;
+		right: 32rpx;
+		bottom: 32rpx;
+	}
+}
+</style>

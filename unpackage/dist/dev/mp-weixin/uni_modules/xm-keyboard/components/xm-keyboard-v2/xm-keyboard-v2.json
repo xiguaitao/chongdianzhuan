@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "xm-popup": "/uni_modules/xm-keyboard/components/xm-popup/xm-popup",
+    "xm-keyboard-input": "/uni_modules/xm-keyboard/components/xm-keyboard-input/xm-keyboard-input",
+    "xm-keyboard-box": "/uni_modules/xm-keyboard/components/xm-keyboard-box/xm-keyboard-box"
+  }
+}

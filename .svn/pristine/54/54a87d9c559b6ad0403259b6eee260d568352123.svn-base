@@ -1,0 +1,64 @@
+// 引入 request 文件
+import request from "../request";
+
+// 获取全部发票抬头列表
+export const getHeadListAll = (params) => {
+  return request({
+    url: `/user/invoice/header/all`,
+    method: "post",
+    data: params,
+  });
+};
+
+// 获取发票抬头列表
+export const getHeadList = (params) => {
+  return request({
+    url: `/user/invoice/header/list`,
+    method: "post",
+    data: params,
+  });
+};
+
+// 新增发票抬头
+export const addHead = (params) => {
+  return request({
+    url: `/user/invoice/header/save`,
+    method: "post",
+    data: params,
+  });
+};
+// 删除发票抬头
+export const delHead = (params) => {
+  return request({
+    url: `/user/invoice/header/delete`,
+    method: "post",
+    data: params,
+  });
+};
+
+// 获取发票抬头信息
+export const getHeadInfo = (params) => {
+  return request({
+    url: `/user/invoice/header/info`,
+    method: "post",
+    data: params,
+  });
+};
+
+// 修改发票抬头信息
+export const updateHead = (params) => {
+  return request({
+    url: `/user/invoice/header/update`,
+    method: "post",
+    data: params,
+  });
+};
+
+// 保存发票信息
+export const saveInfo = (params) => {
+  return request({
+    url: `/user/invoice/info/save`,
+    method: "post",
+    data: params,
+  });
+};

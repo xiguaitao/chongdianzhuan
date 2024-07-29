@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "兑换优惠券",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {
+    "u-loadmore": "/uni_modules/uview-ui/components/u-loadmore/u-loadmore",
+    "u-toast": "/uni_modules/uview-ui/components/u-toast/u-toast",
+    "u-modal": "/uni_modules/uview-ui/components/u-modal/u-modal"
+  }
+}

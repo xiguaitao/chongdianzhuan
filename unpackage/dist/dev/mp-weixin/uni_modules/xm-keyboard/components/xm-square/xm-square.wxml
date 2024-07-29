@@ -1,0 +1,1 @@
+<view class="xm-square data-v-1fdffdf7" style="{{'padding-bottom:'+(height)+';'}}"><view class="xm-square-box data-v-1fdffdf7"><slot></slot></view></view>

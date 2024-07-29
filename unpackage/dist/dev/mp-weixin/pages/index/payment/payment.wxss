@@ -1,0 +1,125 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f6f6f6;
+  padding: 0 32rpx;
+  padding-top: 80rpx;
+  box-sizing: border-box;
+}
+.container .payMoney {
+  margin: 0 auto;
+  text-align: center;
+}
+.container .payMoney text {
+  font-size: 36rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 700;
+  color: #000000;
+}
+.container .payMoney .moneyText {
+  font-size: 56rpx;
+}
+.container .tipView {
+  width: 136rpx;
+  height: 42rpx;
+  margin-top: 16rpx;
+  background: #E8E9ED;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  line-height: 42rpx;
+  text-align: center;
+  margin: 0 auto;
+}
+.container .payTypeView {
+  margin-top: 80rpx;
+  width: 100%;
+  padding: 32rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-sizing: border-box;
+}
+.container .payTypeView .payTitle {
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 700;
+  color: #000000;
+  padding-bottom: 24rpx;
+  border-bottom: 2rpx solid #97979713;
+}
+.container .payTypeView .payType {
+  margin-top: 26rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container .payTypeView .payType .leftView {
+  display: flex;
+  align-items: center;
+}
+.container .payTypeView .payType .leftView image {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+}
+.container .payTypeView .payType .leftView text {
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+}
+.container .payTypeView .payType .rightView radio {
+  width: 26rpx;
+  height: 26rpx;
+  scale: 0.7;
+}
+.container .payBtn {
+  padding: 0 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  bottom: 278rpx;
+}
+.container .payBtn .payText {
+  background: #5997FE;
+  border-radius: 52rpx;
+  width: 100%;
+  height: 104rpx;
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  letter-spacing: 1px;
+  line-height: 104rpx;
+  text-align: center;
+}
+

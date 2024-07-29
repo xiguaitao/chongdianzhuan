@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "充电",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-modal": "/uni_modules/uview-ui/components/u-modal/u-modal",
+    "u-overlay": "/uni_modules/uview-ui/components/u-overlay/u-overlay",
+    "u-loading-icon": "/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "xm-square": "/uni_modules/xm-keyboard/components/xm-square/xm-square"
+  }
+}

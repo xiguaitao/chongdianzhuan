@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "账户管理",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u--image": "/uni_modules/uview-ui/components/u--image/u--image",
+    "u-transition": "/uni_modules/uview-ui/components/u-transition/u-transition",
+    "u--form": "/uni_modules/uview-ui/components/u--form/u--form",
+    "u-form-item": "/uni_modules/uview-ui/components/u-form-item/u-form-item",
+    "u--input": "/uni_modules/uview-ui/components/u--input/u--input",
+    "u-toast": "/uni_modules/uview-ui/components/u-toast/u-toast",
+    "u-code": "/uni_modules/uview-ui/components/u-code/u-code",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "x_upload": "/components/x_upload/x_upload"
+  }
+}

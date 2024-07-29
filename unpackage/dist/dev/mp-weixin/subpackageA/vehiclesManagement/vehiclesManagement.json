@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "车辆管理",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "u-loadmore": "/uni_modules/uview-ui/components/u-loadmore/u-loadmore",
+    "u-swiper": "/uni_modules/uview-ui/components/u-swiper/u-swiper",
+    "incentives": "/components/incentives/incentives",
+    "u-modal": "/uni_modules/uview-ui/components/u-modal/u-modal",
+    "u-safe-bottom": "/uni_modules/uview-ui/components/u-safe-bottom/u-safe-bottom",
+    "car-list": "/subpackageA/components/carList/carList"
+  }
+}

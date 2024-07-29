@@ -1,0 +1,294 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.main.data-v-66559859 {
+  background: #ebf0f5;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.main .content.data-v-66559859 {
+  background: #ebf0f5;
+  height: 100vh;
+  overflow: auto;
+  padding-bottom: 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.main .mu-tabs.data-v-66559859 {
+  width: 100%;
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* position: fixed;
+		top: 0;
+		left: 0; */
+  /* .active-tab {
+			background: #5997FE;
+			color: #5997FE;
+		} */
+}
+.main .mu-tabs .order_tabs.data-v-66559859 {
+  background-color: #fff;
+  display: grid;
+  place-content: center;
+  font-size: 14px;
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  width: 100%;
+  height: 100%;
+}
+.main .mu-tabs .active-tab.data-v-66559859 {
+  color: #5997FE;
+}
+.main .mu-tabs .line.data-v-66559859 {
+  width: 100%;
+  height: 8rpx;
+  position: absolute;
+  bottom: 2rpx;
+  left: 0;
+  display: flex;
+  justify-content: start;
+  transition: all 0.2s ease-in;
+  -webkit-transform: translateX(var(--active-tab));
+          transform: translateX(var(--active-tab));
+}
+.main .mu-tabs .line view.data-v-66559859 {
+  width: 33.33333333%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease-in;
+}
+.main .mu-tabs .line view.data-v-66559859::after {
+  content: "";
+  display: block;
+  width: 92rpx;
+  height: 8rpx;
+  background: #5997FE;
+  border-radius: 6rpx;
+}
+/* .main  */
+.order-tabs.data-v-66559859 {
+  background-color: #fff;
+  color: #000;
+  padding: 12px 20px;
+  font-size: 14px;
+  width: 33.3%;
+  text-align: center;
+}
+.inuseorder.data-v-66559859 {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.alldorder.data-v-66559859 {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+/* .active-tab {
+	background: #1470cc;
+	color: #fff;
+} */
+.main .mu-tabs .item.data-v-66559859 {
+  padding: 5px 10px;
+  line-height: 35px;
+  text-align: center;
+  border-bottom: 1px solid #010c3d;
+}
+.main .mu-tabs .active.data-v-66559859 {
+  color: #1ec5f1;
+  border-bottom: 1px solid #1ec5f1;
+}
+.orderlist.data-v-66559859 {
+  color: #fff;
+  font-size: 16px;
+}
+.orderlist .item.data-v-66559859 {
+  height: auto;
+  background: #061437;
+  border-radius: 8px;
+  margin: 10px;
+  padding: 10px 0;
+}
+.orderlist .item .line.data-v-66559859 {
+  display: flex;
+  line-height: 26px;
+  padding: 0 10px;
+}
+.orderlist .item .labecc.data-v-66559859 {
+  width: 100px;
+}
+.orderlist .item .line .mobile.data-v-66559859 {
+  color: #ff4081;
+}
+.orderlist .item .line .status.data-v-66559859 {
+  color: #1fc3f2;
+}
+.orderlist .item .time.data-v-66559859 {
+  color: #5E77B8;
+  margin-top: 10px;
+  padding: 15px 10px;
+  border-top: 1px solid #032250;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.orderlist .item .tools.data-v-66559859 {
+  margin: 0 10px;
+}
+.orderlist .item .tools .can.data-v-66559859 {
+  background: linear-gradient(315deg, #1fc3f2, #00e6de);
+  border-radius: 4px;
+  color: #fff;
+  text-align: center;
+  padding: 0px 10px 0 10px;
+  line-height: 40px;
+}
+.order-nlist-list.data-v-66559859 {
+  height: 100%;
+  overflow: auto;
+  flex: 1;
+}
+.order-nlist.data-v-66559859 {
+  padding: 32rpx;
+  box-sizing: border-box;
+  /* padding-bottom: 20px; */
+}
+.list-content.data-v-66559859 {
+  height: auto;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  /* margin: 15px 10px;
+	padding: 15px; */
+}
+.list-top .list-list.data-v-66559859:first-child {
+  color: #000;
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+}
+.list-list.data-v-66559859 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: #5c6e99;
+  font-size: 14px;
+  line-height: 30px;
+}
+.list-list view.data-v-66559859:nth-child(1) {
+  font-size: 26rpx;
+  font-family: PingFang-SC, PingFang-SC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.47);
+}
+.list-list view.data-v-66559859:nth-child(2) {
+  font-size: 28rpx;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+}
+.list-list .tip.data-v-66559859 {
+  font-size: 14px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 3px 9px;
+  background-color: #5997FE;
+}
+.ywc.data-v-66559859 {
+  color: #1ba94d;
+}
+.zzcd.data-v-66559859 {
+  color: #a94d1b;
+}
+.ddyc.data-v-66559859 {
+  color: #FF0707;
+}
+.list-btm.data-v-66559859 {
+  border-top: 1px solid #0b2957;
+  display: flex;
+  justify-content: space-between;
+  color: #4d5e87;
+  font-size: 14px;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+.btm-r.data-v-66559859 {
+  color: rgba(0, 0, 0, 0.48);
+}
+.white.data-v-66559859 {
+  color: #000;
+}
+.list-btm .btn.data-v-66559859 {
+  border: 1px solid #3168a1;
+  padding: 0px 10px;
+  border-radius: 6px;
+  margin-left: 10px;
+  font-size: 12px;
+  background: none;
+  color: #6c7ec1;
+}
+.list-btm .btn[disabled].data-v-66559859 {
+  color: #0b2957;
+  border: 1px solid #0b2957;
+  background: none;
+}
+.list-btm view.data-v-66559859 {
+  display: flex;
+  align-items: center;
+}
+.nodata.data-v-66559859 {
+  font-size: 12px;
+  color: #494e61;
+  text-align: center;
+  margin-top: 35%;
+}
+.nodata image.data-v-66559859 {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px;
+  height: 114px;
+}
+.cdState.data-v-66559859 {
+  border: 1px solid #1C559A;
+  border-radius: 6px;
+  padding: 0px 10px;
+  height: 32px;
+  font-weight: 400;
+  color: #3A89E9;
+  font-size: 23rpx;
+  display: flex;
+  align-items: center;
+}
+

@@ -1,0 +1,284 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.main {
+  background-color: #ebf0f5;
+  width: 100vw;
+  min-height: 100vh;
+  /* overflow: hidden; */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.main .swiper {
+  padding: 32rpx;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+.station {
+  padding: 16px 15px 50px 15px;
+}
+.station-msg {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+.station-msg .titlet {
+  font-size: 16px;
+  color: #000;
+  margin-bottom: 8px;
+}
+.line {
+  border-top: 1px solid #213669;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.station-msg .msg-tit {
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.msg-con {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.msg-l {
+  font-size: 12px;
+  line-height: 20px;
+  color: #000;
+}
+.msg-l image {
+  display: inline-block;
+  width: 14px;
+  height: 15px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+/* .msg-l view:first-child image {
+		width: 10px;
+		margin-left: 2px;
+	} */
+.msg-r {
+  color: #000;
+  margin-left: 10px;
+  font-size: 12px;
+}
+.msg-r image {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin: 0 auto 5px;
+}
+.jgxx {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 15px;
+  border-top: 1px solid #213669;
+  color: #000;
+  font-size: 12px;
+}
+.jgxx .t-box {
+  margin-right: 20px;
+  text-align: center;
+}
+.jgxx .time {
+  background-color: #5997FE;
+  color: #fff;
+  border-radius: 20px;
+  padding: 2px 10px;
+  margin-bottom: 5px;
+}
+.jgxx .kard {
+  background-color: #0b1f51;
+  border-radius: 20px;
+  padding: 2px 30px;
+}
+.kardinfo {
+  padding: 2px 0;
+}
+.top-btm {
+  align-items: center;
+}
+.top-btm .btm-l {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.top-btm .btm-l .price {
+  font-size: 16px;
+  color: #29a7ff;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.station-tip {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tip-l,
+.tip-r {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #acb7e1;
+  width: 40%;
+}
+.tip-l view:first-child,
+.tip-r view:first-child {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: #1844b3;
+  border-radius: 5px;
+  margin-right: 15px;
+  background-color: #fff;
+  padding: 2px;
+}
+.tip-l {
+  background-color: #5997FE;
+  color: #fff;
+}
+.tip-r {
+  background-color: #fff;
+}
+.station-list {
+  /* padding-bottom: 10px; */
+}
+.list {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 15px;
+  color: #000;
+  font-size: 12px;
+}
+.list .list-l {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  border: 1px solid #3168a1;
+  margin-right: 20px;
+}
+.list .list-r view view {
+  color: #486bf4;
+}
+.list .list-r view {
+  display: flex;
+  align-items: center;
+  line-height: 20px;
+}
+.list .list-l.busy {
+  color: #ea600c;
+  border-color: #ea600c;
+}
+.station-btm {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  color: #5C6E99;
+  background-color: #0b143a;
+}
+.station-btm .btm-l,
+.station-btm .btm-r {
+  height: 50p;
+  line-height: 50px;
+  width: 50%;
+  text-align: center;
+  background-color: #033a8e;
+}
+.station-btm .btm-l image {
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.station-btm .active {
+  color: #fff;
+  background-color: #5997FE;
+  font-size: 16px;
+}
+.nodata {
+  font-size: 12px;
+  color: #494e61;
+  text-align: center;
+  margin-top: 15%;
+  margin-bottom: 15%;
+}
+.nodata image {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px;
+  height: 114px;
+}
+.infobox {
+  position: fixed;
+  width: 80%;
+  left: 10%;
+  top: 20%;
+  background-color: #fff;
+  border-radius: 10px;
+  z-index: 3;
+}
+.infobox .top-infod {
+  padding: 40px 20px 30px 35px;
+  text-align: center;
+}
+.infobox .top-infod image {
+  width: 100px;
+  height: 100px;
+}
+.infobox .info-txt {
+  color: #000;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 50px;
+}
+.infobox .close {
+  position: absolute;
+  bottom: -60px;
+  right: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+}
+

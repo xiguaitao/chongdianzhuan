@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "添加车辆",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "xm-keyboard-input": "/uni_modules/xm-keyboard/components/xm-keyboard-input/xm-keyboard-input",
+    "xm-keyboard-v2": "/uni_modules/xm-keyboard/components/xm-keyboard-v2/xm-keyboard-v2",
+    "u-picker": "/uni_modules/uview-ui/components/u-picker/u-picker"
+  }
+}

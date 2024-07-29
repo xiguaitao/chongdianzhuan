@@ -1,0 +1,351 @@
+
+page {
+	background: #ffffff;
+}
+
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.user-box-title.data-v-c3ac440a {
+  text-align: center;
+  padding: 30px 0;
+  margin: 10px;
+  background-color: #1470cc;
+  border-radius: 12px;
+}
+.card-box .user-box-title.data-v-c3ac440a {
+  text-align: center;
+  position: relative;
+  color: #ffffff;
+}
+.mu-avatar.data-v-c3ac440a {
+  margin: 10px 10px 10px auto;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.card-box .user-box-title .userAvatar.data-v-c3ac440a {
+  margin: 20px 0 10px 0;
+  width: 70px;
+  height: 70px;
+  font-size: 35px;
+  overflow: hidden;
+}
+.card-box .user-box-title .sx-btn.data-v-c3ac440a {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 14px;
+}
+.row.data-v-c3ac440a {
+  display: flex;
+  margin: 10px 15px;
+  width: calc(100% - 30px);
+  height: 45px;
+  background-color: #06153C;
+  border-radius: 4PX;
+  position: relative;
+}
+.row .input.data-v-c3ac440a {
+  width: 75%;
+  background: #061437;
+  color: #afbdd1;
+  padding: 0 10px;
+  border-radius: 4PX;
+  height: 60px;
+  font-size: 16px;
+}
+.row .bd-text.data-v-c3ac440a {
+  color: #ffffff;
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  line-height: 1.066667rem;
+  font-size: 14px;
+}
+.car-pbox.data-v-c3ac440a {
+  margin: 10px 15px;
+  width: calc(100% - 30px);
+}
+.car-box.data-v-c3ac440a {
+  width: 100%;
+  display: flex;
+  padding: 18px 7px;
+  border-radius: 5px;
+  justify-content: space-between;
+}
+.bg-img.data-v-c3ac440a {
+  background-image: url(/static/img/bg_icon.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100%;
+}
+.car-box .left.data-v-c3ac440a {
+  display: flex;
+  color: #afbdd1;
+}
+.car-box .left .idr.data-v-c3ac440a {
+  font-size: 12px;
+  line-height: 25px;
+  background: #F08F1C;
+  border-radius: 12PX;
+  color: #fff;
+  text-align: center;
+  padding: 0 10px;
+  margin-right: 10px;
+}
+.car-box .card-money.data-v-c3ac440a {
+  color: #4a76f1;
+  font-size: 18px;
+  margin-right: 10px;
+}
+.box-bottom.data-v-c3ac440a {
+  border-radius: 12px;
+  position: fixed;
+  bottom: 40%;
+  width: 90%;
+  left: 5%;
+  right: 5%;
+  background-color: #0f68d1;
+  z-index: 3;
+  color: #afbdd1;
+  padding-bottom: 10px;
+}
+.box-bottom .search.data-v-c3ac440a {
+  color: #5E77B8;
+  margin: 15px;
+  background-color: #0f68d1;
+  border-radius: 5px;
+}
+.box-bottom .search input.data-v-c3ac440a {
+  background-color: #fff;
+  padding: 8px;
+  min-height: 65rpx;
+}
+.box-bottom .search image.data-v-c3ac440a {
+  width: 20px;
+  height: 20px;
+  margin: 10px 0px 9px 10px;
+}
+.box-bottom .bd-text.data-v-c3ac440a {
+  color: #ffffff;
+  padding: 15px;
+}
+.box-bottom .bd-text radio.data-v-c3ac440a {
+  margin-right: 20px;
+}
+.box-bottom .bott-btn.data-v-c3ac440a {
+  margin: 15px;
+  background: #033A8D;
+  color: #fff;
+  font-size: 16px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  border-radius: 8px;
+}
+.car-deti.data-v-c3ac440a {
+  padding: top 10px;
+  width: calc(100%);
+  background: #06153C;
+  border-radius: 0 0 5PX 5PX;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.car-deti .ulcc.data-v-c3ac440a {
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  line-height: 40px;
+  color: #fff;
+}
+.car-deti .btnd.data-v-c3ac440a {
+  color: white;
+  border-radius: 8px;
+  background: #033A8D;
+  text-align: center;
+  line-height: 40px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.mask.data-v-c3ac440a {
+  position: fixed;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+}
+.card-list.data-v-c3ac440a {
+  margin-top: 15px;
+}
+.card-cont.data-v-c3ac440a {
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+.card-cont .nodata.data-v-c3ac440a {
+  font-size: 12px;
+  color: #494e61;
+  text-align: center;
+  margin-top: 35%;
+}
+.card-cont .nodata image.data-v-c3ac440a {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px;
+  height: 114px;
+}
+.care-per.data-v-c3ac440a,
+.per-l.data-v-c3ac440a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.care-per image.data-v-c3ac440a:first-child {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.care-per .per-phone.data-v-c3ac440a {
+  color: #c3cef9;
+  font-size: 16px;
+}
+.care-per .per-phone view.data-v-c3ac440a:last-child {
+  color: #6b8ad9;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.care-per .per-phone view:last-child image.data-v-c3ac440a {
+  vertical-align: middle;
+  margin-right: 3px;
+}
+.per-btn view.data-v-c3ac440a {
+  border-radius: 5px;
+}
+.per-btn view.data-v-c3ac440a:first-child {
+  margin-right: 8px;
+}
+.per-btn.data-v-c3ac440a {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.btn.data-v-c3ac440a {
+  display: inline-block;
+  font-size: 14px;
+  color: #6c7ec1;
+  border: 1px solid #3168a1;
+  padding: 4px 14px;
+  text-align: center;
+}
+.topBtn.data-v-c3ac440a {
+  width: 38%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 80rpx;
+}
+.topBtn text.data-v-c3ac440a {
+  margin-left: 40rpx;
+  color: #BAC9EF;
+  font-size: 28rpx;
+  font-weight: 400;
+}
+.list-cont.data-v-c3ac440a {
+  border-radius: 8px;
+  background-color: #1470cc;
+  margin-bottom: 15px;
+  box-shadow: 0px 0px 8px 7px #eee;
+}
+.list-cont .list-top.data-v-c3ac440a,
+.list-cont .list-c.data-v-c3ac440a,
+.list-cont .list-btm.data-v-c3ac440a,
+.list-cont .list-c .btn-groud.data-v-c3ac440a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.list-cont .list-top.data-v-c3ac440a {
+  padding: 15px;
+  font-size: 14px;
+}
+.list-cont .list-top .zc.data-v-c3ac440a {
+  color: #17aaee;
+}
+.list-top .tip.data-v-c3ac440a {
+  background-color: #dae8f5;
+  color: #1275d8;
+  border-radius: 8px;
+  padding: 3px 7px;
+}
+.list-cont .list-c.data-v-c3ac440a {
+  padding: 5px 15px 20px;
+}
+.list-cont .list-c view.data-v-c3ac440a:first-child {
+  color: #c3cef9;
+  font-size: 20px;
+}
+.list-cont .list-c .btn-groud view.data-v-c3ac440a {
+  border-radius: 14px;
+  font-size: 14px !important;
+}
+.list-cont .list-c .btn-full.data-v-c3ac440a {
+  color: #1275d8 !important;
+  padding: 4px 14px;
+  background-color: #dae8f5;
+  margin-left: 10px;
+}
+.list-cont .list-btm.data-v-c3ac440a {
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 0 0 8px 8px;
+}
+.list-cont .list-btm view ._p.data-v-c3ac440a {
+  font-size: 14px;
+  color: #96a4db;
+}
+.list-cont .list-btm view ._p.data-v-c3ac440a:first-child {
+  color: #5c6e99;
+  margin-bottom: 5px;
+}
+.box-bottom .bd-text radio.data-v-c3ac440a {
+  margin-right: 0;
+}
+.bd-text.data-v-c3ac440a {
+  display: flex;
+  justify-content: space-between;
+}
+radio .wx-radio-input.data-v-c3ac440a {
+  border-color: #87858a;
+  background-color: #081a49;
+}
+

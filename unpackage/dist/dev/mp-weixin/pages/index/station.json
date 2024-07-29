@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "电站信息",
+  "usingComponents": {
+    "u-swiper": "/uni_modules/uview-ui/components/u-swiper/u-swiper"
+  }
+}

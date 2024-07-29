@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "电卡管理",
+  "usingComponents": {
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "u-transition": "/uni_modules/uview-ui/components/u-transition/u-transition"
+  }
+}

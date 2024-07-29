@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "收藏",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "my-list": "/components/myList/myList",
+    "u-loadmore": "/uni_modules/uview-ui/components/u-loadmore/u-loadmore",
+    "u-safe-bottom": "/uni_modules/uview-ui/components/u-safe-bottom/u-safe-bottom"
+  }
+}

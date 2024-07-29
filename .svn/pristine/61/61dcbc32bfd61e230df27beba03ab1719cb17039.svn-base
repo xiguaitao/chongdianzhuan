@@ -1,0 +1,464 @@
+<template>
+	<view class="main">
+		<view class="detail">
+			<view class="detail-msg">
+				<image src="../../static/img/detail-ico.png" v-if="order.orderstate == 3"></image>
+				<image src="../../static/img/error.png" v-if="order.orderstate == 2"></image>
+				<image src="../../static/img/kqz.png" v-if="order.orderstate == 1"></image>
+				<!-- {{order.orderstate==1?'正在充电':order.orderstate==2?'订单已取消':order.orderstate==3?'订单已完成'}} -->
+				<text v-if="order.orderstate == 1">正在充电</text>
+				<text v-if="order.orderstate == 2">订单已取消</text>
+				<text v-if="order.orderstate == 3">订单已完成</text>
+				<text v-if="orderstate == 6 || orderstate == 7">订单结算中</text>
+			</view>
+			<view class="detail-detail">
+				<view class="tit">
+					<span class="name">{{ order.plotName || '' }}</span>
+					<!-- <span class="tab" style="font-size: 24rpx;"></span> -->
+				</view>
+				<view class="detail-con">
+					<view class="top">
+						<image src="../../static/img/ddxx.png" />
+						<view class="name">订单信息</view>
+					</view>
+					<view class="con-list">
+						<view class="list-line">
+							<view class="name">订单编号</view>
+							<view class="content" style="font-size: 24rpx;">{{ order.ordernumber || '' }}</view>
+						</view>
+						<!-- <view v-if="order.realHour">充电时长：{{ order.realHour || '' }}小时</view>
+						<view v-if="order.consumePower">充电电量：{{ order.consumePower || '' }}kWh</view> -->
+						<view class="list-line" v-if="order.realHour">
+							<view class="name">充电时长</view>
+							<view class="content">{{ order.realHour || '' }}小时</view>
+						</view>
+						<view class="list-line" v-if="order.consumePower">
+							<view class="name">充电电量</view>
+							<view class="content">{{ order.consumePower || '' }}kWh</view>
+						</view>
+						<view class="list-line">
+							<view class="name">开始时间</view>
+							<view class="content">{{ order.starttime || '' }}</view>
+						</view>
+						<view class="list-line" v-if="order.orderstate == 3">
+							<view class="name">结束时间</view>
+							<view class="content">
+								{{ formatTime(order.realEndTime, 'yyyy-mm-dd hh:mi:ss') ||
+									formatTime(order.endtime, 'yyyy-mm-dd hh:mi:ss') || '' }}
+
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="detail-con">
+					<view class="top">
+						<image src="../../static/img/sbxx.png" />
+						<view class="name">设备信息</view>
+					</view>
+					<view class="con-list">
+						<view class="list-line">
+							<view class="name">设备编号</view>
+							<view class="content">{{ order.parkid || '' }}</view>
+						</view>
+						<view class="list-line">
+							<view class="name">设备类型</view>
+							<view class="content">{{ order.pileType == 1 ? '快充' : order.pileType == 2 ? '超充' : '慢充' }}
+							</view>
+						</view>
+						<view class="list-line" v-show="order.name" v-if="order.orderstate !== 2">
+							<view class="name">端口</view>
+							<view class="content">{{ order.name || '' }}</view>
+						</view>
+						<view class="list-line" v-show="order.electricity" v-if="order.orderstate !== 2">
+							<view class="name">电流</view>
+							<view class="content">{{ order.electricity || '' }}A</view>
+						</view>
+						<view class="list-line" v-show="order.voltage" v-if="order.orderstate !== 2">
+							<view class="name">电压</view>
+							<view class="content">{{ order.voltage || '' }}V</view>
+						</view>
+						<view class="list-line" v-show="order.maxPower" v-if="order.orderstate !== 2">
+							<view class="name">最大功率</view>
+							<view class="content">{{ order.maxPower || '' }}KW</view>
+						</view>
+					</view>
+				</view>
+				<!-- <view class="detail-con">
+					<view class="top">费用说明</view>
+					<view class="con-list">
+						<view>【尖】11：00-13：00       电费1.01元/度，服务费0.50元/度</view>
+						<view>【峰】13：00-15：00       电费1.38元/度，服务费0.50元/度</view>
+						<view>【平】15：00-18：00       电费0.75元/度，服务费0.50元/度</view>
+				    </view>
+				</view> -->
+				<view class="detail-con">
+					<view class="top">
+						<image src="../../static/img/zfxx.png" />
+						<view class="name">支付信息</view>
+					</view>
+					<view class="con-list">
+						<view class="list-line">
+							<view class="name">电费</view>
+							<view class="content">¥{{ order.chargeFee || '0' }}</view>
+						</view>
+						<view class="list-line">
+							<view class="name">服务费</view>
+							<view class="content">¥{{ order.serviceFee || '0' }}</view>
+						</view>
+
+						<!-- <view class="list-line" v-if="order.payType == 2">
+							<view class="name">预支付金额</view>
+							<view class="content">¥{{ order.ordergoldPre ||  '0' }}</view>
+						</view> -->
+						<!-- <view class="list-line" v-if="order.ordergold">
+							<view class="name">支付金额</view>
+							<view class="content">
+								 {{ order.ordergold || '0' }}
+							</view>
+						</view> -->
+						<view class="list-line" v-if="order.amount">
+							<view class="name">应付金额</view>
+							<view class="content">
+								{{ order.amount || '0' }}
+							</view>
+						</view>
+						<view class="list-line" v-if="order.couponAmount">
+							<view class="name">优惠金额</view>
+							<view class="content">
+								{{ order.couponAmount || '0' }}
+							</view>
+						</view>
+						<view class="list-line">
+							<view class="name">{{ order.orderstate == 3 ? '支付金额' : '预计金额' }}</view>
+							<view class="content">¥{{ order.ordergold || '0' }}</view>
+						</view>
+						<view class="list-line" v-if="order.orderstate == 3">
+							<view class="name">支付方式</view>
+							<view class="content" v-if="order.payType == 1">{{ order.cardNo ? '卡支付' : '账户余额扣款' }}</view>
+							<view class="content" v-if="order.payType == 2">即充即付</view>
+						</view>
+						<!-- <view class="list-line"
+							v-if="order.orderstate == 3 && (order.invoiceStatus == 0 || order.invoiceStatus == 1 || order.invoiceStatus == 3)">
+							<view class="name">是否开票</view>
+							<view class="content">
+								<u-button plain color="#5997FE" shape="circle" @click="toInvoice">申请开票</u-button>
+							</view>
+
+						</view> -->
+					</view>
+				</view>
+				<view class="detail-con">
+					<view class="top">
+						<image src="../../static/img/ddzz.png" />
+						<view class="name">订单状态跟踪</view>
+					</view>
+					<view class="log-list">
+						<view class="log-line" v-for="(item, index) in orderTrace">
+							<view class="icon">
+								<image src="../../static/img/wc.png"></image>
+								<view class="line" v-if="index < orderTrace.length - 1"></view>
+							</view>
+							<view class="log-line_content">
+								<view class="txt">{{ item.logContent }}</view>
+								<view class="time">{{ formatTime(item.createTime, 'hh:mi') }}</view>
+							</view>
+
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+import app from '@/static/js/app.js';
+import {
+	logList,
+	single
+} from '@/static/js/url/chargeOrder.js';
+export default {
+	data() {
+		return {
+			openid: '',
+			orderNumber: '',
+			order: {},
+			orderTrace: [],
+			orderId: ''
+		}
+	},
+	onLoad(option) {
+		this.orderId = option.orderId
+		this.orderNumber = option.orderNumber;
+		this.openid = uni.getStorageSync('openid')
+		//获取订单信息
+		this.getOrderData();
+		//获取订单日志
+		this.getOrderTrace();
+	},
+	methods: {
+		formatTime(timestamps, format) {
+			if (!timestamps) return ''
+			var date = new Date(timestamps);
+			var finalstr = format;
+			finalstr = finalstr.replace('yyyy', date.getFullYear()); //年
+			finalstr = finalstr.replace('mm', this.formatNum(date.getMonth() + 1)); //月
+			finalstr = finalstr.replace('dd', this.formatNum(date.getDate())); //天
+			finalstr = finalstr.replace('hh', this.formatNum(date.getHours())); //时
+			finalstr = finalstr.replace('mi', this.formatNum(date.getMinutes())); //分
+			finalstr = finalstr.replace('ss', this.formatNum(date.getSeconds())); //秒
+			finalstr = finalstr.replace('SSS', this.formatMilliseconds(date.getMilliseconds())); //毫秒
+			//如果不想返回秒和毫秒，注释掉相应行数，传入参数时去掉该参数
+			return finalstr;
+		},
+		formatNum(arg0) {
+			let str = arg0.toString();
+			if (str.length == 1) {
+				return "0" + str;
+			} else {
+				return str;
+			}
+		},
+		formatMilliseconds(arg) {
+			var str = arg.toString();
+			if (str.length == 1) {
+				return "00" + str;
+			} else if (str.length == 2) {
+				return "0" + str;
+			} else if (str.length == 3) {
+				return str;
+			}
+		},
+		getOrderData() {
+			const data = {
+				id: this.orderId,
+				openId: this.openid
+			}
+			single(data)
+				.then(singleRes => {
+					if (singleRes.code == 0) {
+						this.order = singleRes.data;
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: 'error',
+						})
+					}
+
+				})
+
+
+		},
+		getOrderTrace() {
+			const data = {
+				openId: this.openid,
+				orderNumber: this.orderNumber
+			}
+			logList(data)
+				.then(res => {
+					if (res.code == 0) {
+						this.orderTrace = res.data;
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: 'error',
+						})
+					}
+				})
+
+
+		},
+
+		toInvoice() {
+			uni.navigateTo({
+				url: `/subpackageA/openInvoice/openInvoice?id=${this.orderId}&ordergold=${this.order.ordergold}`
+			})
+		}
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+.main {
+	background: #F6F6F6;
+	width: 100vw;
+	min-height: 100vh;
+	/* overflow: hidden; */
+}
+
+.detail {
+	padding: 15px;
+}
+
+.detail-msg {
+	padding: 20px;
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 28rpx;
+	font-family: PingFangSC, PingFang SC;
+	font-weight: 500;
+	color: #5997FE;
+
+	image {
+		display: inline-block;
+		width: 112rpx;
+		height: 112rpx;
+		/* margin-right: 15px; */
+		vertical-align: middle;
+		margin-bottom: 16rpx;
+	}
+}
+
+/* .detail-msg {
+	padding: 20px;
+	color: #aab5dd;
+	font-size: 20px;
+	margin-bottom: 15px;
+} */
+
+.detail-detail {
+	padding: 22rpx;
+	background-color: #fff;
+	border-radius: 16rpx;
+
+	.tit {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 32rpx;
+		border-bottom: 2rpx solid #F6F6F6;
+
+		.name {
+			font-size: 28rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 500;
+		}
+
+		.tab {
+			display: inline-block;
+			color: #fff;
+			font-size: 28rpx;
+			padding: 6rpx 16rpx;
+			background-color: #5997FE;
+			border-radius: 16rpx;
+
+		}
+	}
+}
+
+
+.detail-con {
+	.top {
+		color: #c3cef9;
+		font-size: 14px;
+		margin: 5px 0 5px;
+		padding: 5px 10px 0;
+		display: flex;
+		align-items: center;
+
+		image {
+			width: 24rpx;
+			height: 24rpx;
+			margin-right: 4rpx;
+		}
+
+		.name {
+			font-size: 28rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 400;
+			color: #5997FE;
+		}
+	}
+
+	.con-list {
+		color: #5C6E99;
+		font-size: 14px;
+		line-height: 30px;
+		padding: 5px 10px 0px;
+
+
+
+		.list-line {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.name {
+				font-size: 26rpx;
+				font-family: PingFang-SC, PingFang-SC;
+				font-weight: 400;
+				color: rgba(0, 0, 0, 0.47);
+			}
+
+			.content {
+				max-width: 460rpx;
+				font-size: 28rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #000000;
+				line-height: 30rpx;
+				overflow-wrap: break-word;
+			}
+		}
+	}
+}
+
+
+.log-list {
+	color: #5C6E99;
+	padding: 10px 15px 0px;
+	font-size: 14px;
+
+	.log-line {
+		/* position: relative; */
+		display: flex;
+		line-height: 30px;
+		height: 50px;
+
+		.icon {
+			margin-right: 15px;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+
+			image {
+				width: 32rpx;
+				height: 32rpx;
+			}
+
+			.line {
+				/* position: absolute; */
+				/* left: 15px; */
+				/* top: 28px; */
+				height: calc(100% - 32rpx);
+				border-left: 2px solid #6378c7;
+			}
+
+		}
+
+		.log-line_content {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+
+			.txt {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: rgba(0, 0, 0, 0.45);
+			}
+
+			.time {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: rgba(0, 0, 0, 0.45);
+			}
+		}
+
+	}
+}
+</style>

@@ -1,0 +1,548 @@
+<template>
+	<view class="container">
+		<view class="main">
+			<view class="mainContent">
+				<view class="nav">
+					<u-navbar :titleStyle="titleStyle" title="个人中心" :autoBack="true" bgColor="transparent"
+						:fixed="false">
+						<template v-slot:left></template>
+					</u-navbar>
+				</view>
+				<view class="content">
+					<view class="users">
+						<view class="usersLeft" @click="grJump">
+							<view class="avatar">
+								<u--image :showLoading="true" :src="userData.headImage ? userData.headImage : avatarUrl"
+									width="124rpx" height="124rpx" shape="circle">
+								</u--image>
+							</view>
+							<view class="message">
+								<view class="name">{{ userData.userName }}</view>
+								<view class="phone">{{ userData.mobile }}</view>
+								<view class="type">
+									<view>
+										<u--image :showLoading="true" :src="require('@/static/img/me_000.png')"
+											width="20rpx" height="20rpx" shape="circle">
+										</u--image>
+										<lable>{{ userData.authinfo == 1 ? "个人用户" : "企业用户" }}</lable>
+									</view>
+								</view>
+							</view>
+						</view>
+						<view class="usersRight">
+							<view class="charge" @click="tkJump">充值 ></view>
+							<view class="refund" @click="refund()">退款></view>
+						</view>
+					</view>
+					<view class="data">
+						<view class="dataBg">
+							<image src="../../static/img/me_bg.png" />
+						</view>
+						<view class="dataList">
+							<view class="list" v-for="item in list" :key="item.id" @click="cellClick(item)">
+								<view class="number">{{ item.number }}</view>
+								<view class="text">{{ item.text }}</view>
+							</view>
+						</view>
+					</view>
+					<view class="contentList">
+						<u-cell-group :border="false">
+							<u-cell :icon="item.icon" :title="item.title" isLink v-for="item in cellList" :key="item.id"
+								:url="item.url"></u-cell>
+							<u-cell :icon="require('../../static/img/me_head.png')" title="发票抬头" isLink
+								@click="invoiceHeader"></u-cell>
+							<u-cell :icon="require('../../static/img/me_14.png')" title="客服热线" isLink @click="call"
+								:border="false" :value="phoneNumber"></u-cell>
+						</u-cell-group>
+					</view>
+				</view>
+			</view>
+			<view class="mainBg"></view>
+		</view>
+		<view class="tabbar">
+			<myTabbar :selected="3">
+			</myTabbar>
+		</view>
+	</view>
+</template>
+
+<script>
+import app from '@/static/js/app.js';
+import { getUserQueryAccountBalance } from '@/static/js/url/wode.js';
+import { getOpenId, getPhone, getInfo } from '@/static/js/url/phone.js';
+import { getUserInfo } from '@/static/js/url/wode.js';
+import { logList, refundRechargeRecord } from '@/static/js/url/vacancy.js';
+import { setInvoiceInfo } from "@/static/js/url/invoice.js"
+export default {
+	data() {
+		return {
+			phoneNumber: '4008635536',
+			toDecimal2: app.toDecimal2,
+			openId: '',
+			userName: '',
+			mobile: '',
+			id: '',
+			accountAmount: 0.00, //账户余额
+			cardAmount: 0.00, //卡余额
+			couponRecordTotalAll: 0, //优惠券数量
+			integral: 0, //积分
+			avatarUrl: require("@/static/img/logo_hehao.png"),
+			modalShow: false,
+			userData: {},
+			titleStyle: {
+				color: "#ffffff"
+			},
+			list: {
+
+				accountAmount: {
+					id: 1,
+					number: '0.00',
+					text: "余额",
+					url: "/pages/wode/vacancy",
+				},
+				integral: {
+					id: 2,
+					number: '0',
+					text: "积分",
+					url: "/subpackageA/pointsDetail/pointsDetail",
+				},
+				couponRecordTotalAll: {
+					id: 3,
+					number: '0',
+					text: "优惠券",
+					url: "/pages/wode/vouchers/vouchers",
+				},
+
+			},
+			cellList: [
+				{
+					id: 1,
+					icon: require('../../static/img/me_9.png'),
+					title: "账户管理",
+					url: "/pages/wode/vacancy",
+				},
+				{
+					id: 2,
+					icon: require('../../static/img/me_10.png'),
+					title: "电卡管理",
+					url: "/pages/wode/cardlist",
+				},
+				{
+					id: 3,
+					icon: require('../../static/img/me_11.png'),
+					title: "车辆管理",
+					url: "/subpackageA/vehiclesManagement/vehiclesManagement",
+				},
+				{
+					id: 4,
+					icon: require('../../static/img/me_12.png'),
+					title: "我的收藏",
+					url: "/subpackageA/favorite/favorite",
+				},
+				{
+					id: 5,
+					icon: require('../../static/img/me_13.png'),
+					title: "常见问题",
+					url: "/subpackageA/commonProblems/commonProblems",
+				},
+				{
+					id: 6,
+					icon: require('../../static/img/me_15.png'),
+					title: "问题反馈",
+					url: "/pages/wode/problem",
+				},
+				// {
+				// 	id: 7,
+				// 	icon: require('../../static/img/me_14.png'),
+				// 	title: "发票抬头",
+				// 	url: "/subpackageA/invoiceHeaderManagement/invoiceHeaderManagement",
+				// },
+			],
+			invoiceStatus: 0
+
+		}
+	},
+	onLoad(option) {
+		if (!uni.getStorageSync("token")) {
+			this.doAppLogin()
+		}
+	},
+	onShow() {
+		this.openId = uni.getStorageSync("openid");
+		this.getUserInfos(this.openId)
+		this.getUserQueryAccountBalances();
+		this.updateApp();
+		this.getSetting()
+	},
+	onReachBottom() {
+		console.log('到底了::: ');
+
+	},
+	methods: {
+		updateApp() {
+			const updateManager = uni.getUpdateManager();
+
+			updateManager.onCheckForUpdate(function (res) {
+				// 请求完新版本信息的回调
+				console.log("是否有最新版本", res);
+			});
+
+			updateManager.onUpdateReady(function (res) {
+				console.log("新版本已经准备好", res);
+				uni.showModal({
+					title: '更新提示',
+					content: '新版本已经准备好，是否重启应用？',
+					success(res) {
+						if (res.confirm) {
+							// 清空所有缓存
+							// uni.clearStorageSync();
+							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+							updateManager.applyUpdate();
+						}
+					}
+				});
+			});
+			updateManager.onUpdateFailed(function (res) {
+				// 新的版本下载失败
+				console.log("新的版本下载失败", res);
+			});
+		},
+		refund: function () {
+			uni.showModal({
+				title: '提示',
+				content: '确认账户余额退款(若存在使用奖励金额将优先扣除)？',
+				success: (res) => {
+					if (res.confirm) {
+						console.log('用户点击确定');
+						refundRechargeRecord({ openId: this.openId }).then(res => {
+							if (res.code === 0) {
+								uni.showToast({
+									title: "余额退款成功",
+									icon: 'none',
+									duration: 3000,
+									success: res => {
+										// this.listData.page = 1
+										// this.logLists()
+										this.getUserQueryAccountBalances();
+									}
+								})
+							} else {
+								uni.showToast({
+									title: res.msg,
+									icon: 'none'
+								})
+							}
+						})
+					} else if (res.cancel) {
+						console.log('用户点击取消');
+					}
+				}
+			});
+		},
+		cellClick(item) {
+			const { url } = this.list[item]
+			uni.navigateTo({
+				url,
+			})
+		},
+		grJump() {
+			uni.navigateTo({
+				url: '/pages/wode/personalInfo'
+			})
+		},
+		tkJump() {
+			uni.navigateTo({
+				url: "/pages/chognzhi/chognzhi"
+			})
+		},
+		doAppLogin() {
+			let that = this;
+			uni.login({
+				"provider": "weixin",
+				"onlyAuthorize": true, // 微信登录仅请求授权认证
+				success: function (event) {
+					const { code } = event
+					// this.code = code;
+					//客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+					getOpenId({ code }).then(res => {
+						that.openId = res.data.openid;
+						uni.setStorageSync("openid", res.data.openId);
+						uni.setStorageSync("token", res.data.token);
+						that.getUserInfos(res.data.openId)
+					})
+				},
+				fail: function (err) {
+				}
+			})
+		},
+		// 获取用户信息
+		getUserInfos(openId) {
+			if (!openId) {
+				return;
+			}
+			getUserInfo({ openId }).then(res => {
+				if (res.code === 0) {
+					uni.setStorageSync("userData", res.data);
+					this.userData = res.data
+				}
+			})
+		},
+		toPhone() {
+			uni.navigateTo({
+				url: '/pages/index/phone/phone'
+			})
+
+		},
+		getUserQueryAccountBalances() {
+			getUserQueryAccountBalance({ openId: this.openId }).then(res => {
+				if (res.code === 0) {
+					if (res.data && res.data.phone) {
+						this.phoneNumber = res.data.phone
+					}
+					const key = ["couponRecordTotalAll", "accountAmount", "integral"];
+					key.forEach(element => {
+						this.$set(this.list, `${element}.number`, res.data[element])
+					});
+				}
+			})
+		},
+		call() {
+			uni.makePhoneCall({
+				phoneNumber: this.phoneNumber, // 这里就是自己要拨打的电话号码
+				success: (res) => {
+				},
+				fail: (res) => {
+				}
+			})
+		},
+		invoiceHeader() {
+			uni.navigateTo({ url: '/subpackageA/invoiceHeaderManagement/invoiceHeaderManagement' })
+		},
+		tochognzhi() {
+			uni.switchTab({
+				url: '../chognzhi/chognzhi'
+			})
+		},
+		onChooseAvatar(e) {
+			const {
+				avatarUrl
+			} = e.detail
+			this.avatarUrl = avatarUrl
+		},
+		// 获取设置信息
+		getSetting() {
+			setInvoiceInfo().then(res => {
+				if (res.code == 0) {
+					this.invoiceStatus = res.data.invoiceStatus
+
+				}
+			})
+		}
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+.container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	background: #F1F3F6;
+
+	.main {
+		width: 100%;
+		flex: 1;
+		position: relative;
+		overflow-y: auto;
+
+		.mainContent {
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 3;
+
+			.nav {}
+
+			.content {
+				padding: 32rpx;
+				box-sizing: border-box;
+
+				.users {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+
+					.usersLeft {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+
+						.avatar {
+							margin-right: 16rpx;
+						}
+
+						.message {
+							.name {
+								font-family: PingFang SC, PingFang SC;
+								font-weight: 500;
+								font-size: 32rpx;
+								color: #2E3033;
+								line-height: 38rpx;
+								margin-bottom: 8rpx;
+							}
+
+							.phone {
+								font-family: PingFang SC, PingFang SC;
+								font-weight: 400;
+								font-size: 24rpx;
+								color: #616366;
+								line-height: 28rpx;
+								margin-bottom: 8rpx;
+							}
+
+							.type {
+								lable {
+									font-family: PingFang SC, PingFang SC;
+									font-weight: 400;
+									font-size: 16rpx;
+									color: #FFFFFF;
+									line-height: 19rpx;
+									margin-left: 4rpx;
+								}
+
+								view {
+									width: fit-content;
+									background: #16D97D;
+									display: flex;
+									align-items: center;
+									padding: 4rpx 12rpx;
+									box-sizing: border-box;
+									border-radius: 100rpx 100rpx 100rpx 100rpx;
+
+									span {
+										margin-left: 4rpx;
+										font-family: PingFang SC, PingFang SC;
+										font-weight: 400;
+										font-size: 16rpx;
+										color: #FFFFFF;
+										line-height: 19rpx;
+									}
+								}
+							}
+						}
+					}
+
+					.usersRight {
+						.charge {
+							display: grid;
+							place-content: center;
+							padding: 8rpx 32rpx;
+							box-sizing: border-box;
+							font-family: PingFang SC, PingFang SC;
+							font-weight: 400;
+							font-size: 28rpx;
+							color: #FFFFFF;
+							line-height: 33rpx;
+							border-radius: 100rpx 100rpx 100rpx 100rpx;
+							background: #5995FE;
+							margin-bottom: 24rpx;
+						}
+
+						.refund {
+							display: grid;
+							place-content: center;
+							font-family: PingFang SC, PingFang SC;
+							font-weight: 400;
+							font-size: 20rpx;
+							color: #FF9E59;
+							line-height: 23rpx;
+						}
+					}
+				}
+
+				.data {
+					width: 100%;
+					margin-top: 48rpx;
+					position: relative;
+					height: 160rpx;
+					/* box-shadow: 0rpx 4rpx 8rpx 0rpx #3399FF; */
+					filter: drop-shadow(0px 10rpx 15rpx #3399FF);
+
+					.dataBg {
+						position: absolute;
+						width: 100%;
+						height: 100%;
+						top: 0;
+						left: 0;
+
+						image {
+							width: 100%;
+							height: 100%;
+						}
+					}
+
+					.dataList {
+						position: absolute;
+						width: 100%;
+						height: 100%;
+						top: 0;
+						left: 0;
+						display: flex;
+						align-items: center;
+						justify-content: space-around;
+
+					}
+
+					.list {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						flex-direction: column;
+
+						.number {
+							font-family: DIN-Bold, DIN-Bold;
+							font-weight: 400;
+							font-size: 44rpx;
+							color: #FFFFFF;
+							line-height: 52rpx;
+							margin-bottom: 8rpx;
+						}
+
+						.text {
+							font-family: PingFang SC, PingFang SC;
+							font-weight: 400;
+							font-size: 24rpx;
+							color: rgba(255, 255, 255, 0.7);
+							line-height: 28rpx;
+						}
+					}
+				}
+
+				.contentList {
+					margin-top: 68rpx;
+					padding: 12rpx 32rpx;
+					box-sizing: border-box;
+					border-radius: 16rpx;
+					background: #fff;
+				}
+			}
+		}
+
+		.mainBg {
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 562rpx;
+			background: linear-gradient(180deg, #B2CFFF 0%, rgba(229, 239, 255, 0) 100%);
+		}
+	}
+
+	.tabbar {
+		z-index: 3;
+	}
+}
+</style>
